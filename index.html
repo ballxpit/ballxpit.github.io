@@ -118,6 +118,12 @@ section.picker{margin-top:16px;border:2px solid var(--line2);border-radius:8px;p
 .why img,.lvl img{width:20px;height:20px;border-radius:3px}
 .why i{color:var(--fg3)}
 .card.mergeable{border-color:var(--accent2)}
+/* in the run view a found evolution is still a recommendation: keep it in full colour, the badge says it is found */
+body.run .card.done{border-color:var(--line2)}
+body.run .card.done.mergeable{border-color:var(--accent2)}
+body.run .card.done .big img{filter:none}
+body.run .card.done .tick{display:none}
+body.run .card.done .name{color:var(--fg)}
 .lvl ol{margin:8px 0 0;padding:0;list-style:none;counter-reset:lv;display:flex;flex-direction:column;gap:12px}
 .lvl li{display:grid;grid-template-columns:18px minmax(0,1fr);column-gap:8px;counter-increment:lv}
 .lvl li::before{content:counter(lv) ".";grid-row:1;align-self:center;color:var(--fg3);font-family:var(--font-mono);font-size:12px}
