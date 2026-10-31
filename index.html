@@ -44,6 +44,9 @@ h1 .x{color:var(--accent)}
 .bar{height:8px;background:var(--line2);border-radius:2px;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
 .bar.total i{background:var(--mint)}
+/* a finished group turns green */
+.bar.full i{background:var(--ok)}
+.prog .lbl .ok{color:var(--ok);font-style:normal;font-weight:600}
 
 .modes{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
 .mright{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -740,7 +743,7 @@ function renderStatic(){
 function renderProgress(){
   const rows=TIERS.map(t=>{ const es=ALL.filter(e=>inTier(e,t.t)&&want(e)); return {label:tierLabel(t.t),d:es.filter(e=>done.has(e.id)).length,n:es.length}; });
   const tot={label:T('total'),d:rows.reduce((a,r)=>a+r.d,0),n:rows.reduce((a,r)=>a+r.n,0)};
-  $('#progress').innerHTML=[tot,...rows].map((r,i)=>`<div class="prog"><div class="lbl"><span>${r.label}</span><span><b>${r.d}</b> / ${r.n}</span></div><div class="bar ${i===0?'total':''}"><i style="width:${r.n?100*r.d/r.n:0}%"></i></div></div>`).join('');
+  $('#progress').innerHTML=[tot,...rows].map((r,i)=>`<div class="prog"><div class="lbl"><span>${r.label}</span><span>${r.n&&r.d===r.n?'<em class="ok">✓</em> ':''}<b>${r.d}</b> / ${r.n}</span></div><div class="bar ${i===0?'total':''} ${r.n&&r.d===r.n?'full':''}"><i style="width:${r.n?100*r.d/r.n:0}%"></i></div></div>`).join('');
   $('#footSum').textContent = tot.n-tot.d===0 ? T('footAll') : T('footMiss')(tot.n-tot.d,tot.n);
 }
 function renderTools(){
@@ -820,7 +823,7 @@ function renderMain(){
       const big=e=>e.recipes.some(r=>r.length>2);
       es.sort((x,y)=>(x.post-y.post)||(big(x)-big(y))||x.name.localeCompare(y.name,'en')); total+=es.length; const miss=all.filter(e=>!done.has(e.id)).length;
       html+=`<div class="tierhead"><h2>${tierLabel(t.t)}</h2><span class="n">${miss===0?T('complete'):T('missOf')(miss,all.length)} · ${esc(T('tierSub')[t.t])}</span><span class="ln"></span></div>`;
-      const empty=`<div class="empty">${ui.filter==='missing'&&!ui.q&&ui.newF==='all'?T('allFound'):T('nothing')}</div>`;
+      const empty=`<div class="empty">${ui.filter==='missing'&&!ui.q?T('allFound'):T('nothing')}</div>`;
       if(t.t!=='bp'){ html+=es.length?grid(es):empty; continue; }
       const base=es.filter(e=>e.kind), evo=es.filter(e=>!e.kind), evoMiss=all.filter(e=>!e.kind&&!done.has(e.id)).length;
       html+=base.length?grid(base):(evo.length?'':empty);
