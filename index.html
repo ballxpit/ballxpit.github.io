@@ -12,24 +12,14 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: sticky progress header; run picker (multi-select inventory) on top; below: pick recommendations, buildable now, still possible — or the full overview grouped by tier. Detail modal for any sprite. Dark-first, borrowed from the chart: pit-black tiles on terracotta rules, mint for "new". */
+/* Layout: sticky progress header; run picker (multi-select inventory) on top; below: pick recommendations, buildable now, still possible — or the full overview grouped by tier. Detail modal for any sprite. Light theme only, borrowed from the chart: pit-black sprite tiles on terracotta rules, mint for "new". */
 :root{
-  --bg:#18120f; --bg2:#22191a; --bg3:#2c2124; --tile:#1e181a; --line:#5b3d32; --line2:#3a2a27;
-  --fg:#f1e6dc; --fg2:#b9a398; --fg3:#7f6a60;
-  --accent:#d08a52; --accent2:#b06f44; --mint:#9fe9d0; --mint2:#2f8c73; --ok:#7fd48f; --ok2:#2f6f43; --danger:#e07b6c; --warn:#e0b45c;
+  --bg:#efe3da; --bg2:#f8efe8; --bg3:#fff8f3; --tile:#1e181a; --line:#b57d68; --line2:#dcc3b7;
+  --fg:#2a1d18; --fg2:#6b534a; --fg3:#9b8077;
+  --accent:#b35f2a; --accent2:#8a4a22; --mint:#1f8a6e; --mint2:#9fe9d0; --ok:#2d7a44; --ok2:#9fd9ae; --danger:#b03e2f; --warn:#9a6a12;
   --font-display:"Silkscreen","Courier New",monospace; --font-body:"IBM Plex Sans",system-ui,sans-serif; --font-mono:"IBM Plex Mono",ui-monospace,monospace;
-  color-scheme:dark;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
-  --bg:#efe3da; --bg2:#f8efe8; --bg3:#fff8f3; --tile:#1e181a; --line:#b57d68; --line2:#dcc3b7;
-  --fg:#2a1d18; --fg2:#6b534a; --fg3:#9b8077;
-  --accent:#b35f2a; --accent2:#8a4a22; --mint:#1f8a6e; --mint2:#9fe9d0; --ok:#2d7a44; --ok2:#9fd9ae; --danger:#b03e2f; --warn:#9a6a12;
-  color-scheme:light; } }
-:root[data-theme="light"]{
-  --bg:#efe3da; --bg2:#f8efe8; --bg3:#fff8f3; --tile:#1e181a; --line:#b57d68; --line2:#dcc3b7;
-  --fg:#2a1d18; --fg2:#6b534a; --fg3:#9b8077;
-  --accent:#b35f2a; --accent2:#8a4a22; --mint:#1f8a6e; --mint2:#9fe9d0; --ok:#2d7a44; --ok2:#9fd9ae; --danger:#b03e2f; --warn:#9a6a12;
-  color-scheme:light; }
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:14px;line-height:1.45}
@@ -431,7 +421,7 @@ const I18N={
   hintSel:(n,m,o)=>`<b>${n}</b> ausgewählt → <b>${m}</b> Evolutionen baubar, davon <b>${o}</b> noch nicht gefunden.`,
   picks:'Empfohlene Picks',picksTag:'Entscheidungshilfe',picksHelpSel:'Nur noch nicht gefundene Evolutionen zählen. Ausgehend von deinem Durchlauf: Welcher Ball oder welches Item bringt dir am meisten Neues? Antippen fügt ihn deinem Durchlauf hinzu.',
   picksHelpEmpty:'Noch nichts ausgewählt, also ausgehend von null: Welche Teile stecken in den meisten noch fehlenden Evolutionen?',
-  legendDirect:'Sofort baubar',legendDirectHelp:'Mit diesem einen Pick kannst du eine noch fehlende Evolution komplett bauen.',legendNear:'Bringt näher',legendNearHelp:'Der Pick ist einer von mehreren Picks, die dir noch fehlen. Was danach am wenigsten fehlt, steht oben. Orange markiert = baut auf deinem Durchlauf auf, rot = fehlt danach noch.',pWith:'mit',pStill:'danach noch',pMore:n=>`+${n} weitere`,
+  legendDirect:'Sofort baubar',legendDirectHelp:'Mit diesem einen Pick kannst du eine noch fehlende Evolution komplett bauen.',legendNear:'Bringt näher',legendNearHelp:'Der Pick ist einer von mehreren Picks, die dir noch fehlen. Was danach am wenigsten fehlt, steht oben. Orange markiert = baut auf deinem Durchlauf auf, rot = fehlt danach noch.',pWith:'mit',pOr:'oder',pStill:'danach noch',pMore:n=>`+${n} weitere`,
   modeRun:'Mein Durchlauf',modeLex:'Lexikon',modeData:'⇄ Übertragen / Reset',dTitle:'Übertragen & Zurücksetzen',dAuto:'Alles wird automatisch in diesem Browser gespeichert: Fortschritt, Durchlauf, Verlauf und Einstellungen. Hier musst du nichts sichern. Diese Seite brauchst du nur, um deinen Stand auf ein anderes Gerät oder in eine neue Version der Datei zu übertragen.',dExport:'Übertragen: Code kopieren',dExportSub:'zeigt live deinen aktuellen Stand',dImport:'Übertragen: Code einfügen',dImportSub:'ersetzt Fortschritt und Durchlauf auf diesem Gerät',dReset:'Zurücksetzen',dResetSub:'löscht Fortschritt, Durchlauf und Verlauf auf diesem Gerät',grpNew:'Lohnt sich: fehlt dir noch oder Zutat für Fehlendes',grpOld:'Bringt nichts Neues (nur Platz machen)',foundButIng:'schon gefunden, aber Zutat für Fehlendes',missingForYou:'fehlt dir noch',notFoundYet:'Noch nicht gefunden',eitherOr:'Entweder-oder',alsoFor:'auch nötig für',eitherOrHelp:'Der Ball wird beim Mergen verbraucht. Was du hier baust, nimmt ihn den anderen weg, bis du ihn erneut bekommst.',natTitle:'Neu im Naturalist-Update (v1.3)',pickBalls:'Bälle',bestPick:'Bester Pick',chainHint:'Das neue Ergebnis ist selbst Zutat für so viele weitere fehlende Evolutionen',lvlFound:'schon gefunden, aber Zutat für',pickPassives:'Passives',direct:'Sofort baubar',near:'Bringt näher',none:'—',
   canNow:'Jetzt baubar',canNowHelp:'Merges, deren Zutaten du gerade in der Hand hast. Sortiert nach Nutzen: Ergebnisse, die als Zutat für weitere fehlende Evolutionen dienen, zuerst. „Jetzt mergen“ nimmt die Zutaten aus deinem Durchlauf und setzt das Ergebnis ein, so wie im Spiel.',newForYou:n=>`${n} neu für dich`,
   canNowEmpty:'Nichts Fehlendes baubar. Wähle weitere Teile aus oder nimm einen der empfohlenen Picks.',
@@ -456,7 +446,7 @@ otherInRun:'Weitere Evolutionen im Durchlauf (keine Zutat, belegen aber einen Sl
   hintSel:(n,m,o)=>`<b>${n}</b> selected → <b>${m}</b> evolutions buildable, <b>${o}</b> of them not found yet.`,
   picks:'Recommended picks',picksTag:'Decision aid',picksHelpSel:'Only evolutions you have not found yet count. Based on your run: which ball or item gives you the most new ones? Tap to add it to your run.',
   picksHelpEmpty:'Nothing selected yet, so starting from zero: which parts appear in the most missing evolutions?',
-  legendDirect:'Buildable now',legendDirectHelp:'With this one pick you can fully build a missing evolution.',legendNear:'Gets closer',legendNearHelp:'The pick is one of several picks you still need. Whatever needs the least afterwards comes first. Orange highlight = builds on your run, red = still missing afterwards.',pWith:'with',pStill:'then still',pMore:n=>`+${n} more`,
+  legendDirect:'Buildable now',legendDirectHelp:'With this one pick you can fully build a missing evolution.',legendNear:'Gets closer',legendNearHelp:'The pick is one of several picks you still need. Whatever needs the least afterwards comes first. Orange highlight = builds on your run, red = still missing afterwards.',pWith:'with',pOr:'or',pStill:'then still',pMore:n=>`+${n} more`,
   modeRun:'My run',modeLex:'Library',modeData:'⇄ Transfer / reset',dTitle:'Transfer & reset',dAuto:'Everything is saved automatically in this browser: progress, run, history and settings. Nothing to save here. You only need this page to move your state to another device or into a new version of the file.',dExport:'Transfer: copy code',dExportSub:'shows your current state live',dImport:'Transfer: paste code',dImportSub:'replaces progress and run on this device',dReset:'Reset',dResetSub:'deletes progress, run and history on this device',grpNew:'Worth it: still missing or ingredient for something missing',grpOld:'Nothing new (only frees slots)',foundButIng:'already found, but ingredient for something missing',missingForYou:'still missing',notFoundYet:'Not found yet',eitherOr:'Either-or',alsoFor:'also needed for',eitherOrHelp:'The ball is consumed by the merge. Whatever you build here takes it from the others until you get it again.',natTitle:'New in the Naturalist update (v1.3)',pickBalls:'Balls',bestPick:'Best pick',chainHint:'The new result is itself an ingredient for this many further missing evolutions',lvlFound:'already found, but ingredient for',pickPassives:'Passives',direct:'Buildable now',near:'Gets closer',none:'—',
   canNow:'Buildable now',canNowHelp:'Merges whose parts you hold right now. Sorted by value: results that serve as ingredients for further missing evolutions first. “Merge now” removes the parts from your run and adds the result, like in the game.',newForYou:n=>`${n} new for you`,
   canNowEmpty:'Nothing missing is buildable. Select more parts or take one of the recommended picks.',
@@ -517,11 +507,13 @@ function expand(n,inv,memo){
 }
 function plan(inv){ const memo={}, res={};
   for(const e of DATA.evos){ if(inv[e.name]>0){ res[e.name]={have:true,total:0,missing:{},how:{}}; continue; }
-    let best=null;
+    let best=null, alts=[];
     for(const c of expand(e.name,inv,memo)){ const missing={}; let total=0;
       for(const k in c.req){ const m=Math.max(0,c.req[k]-(inv[k]||0)); if(m){ missing[k]=m; total+=m; } }
-      if(!best||total<best.total) best={total,missing,how:c.how,req:c.req}; }
-    res[e.name]=best; }
+      const x={total,missing,how:c.how,req:c.req};
+      if(!best||total<best.total){ best=x; alts=[x]; } else if(total===best.total) alts.push(x); }
+    // alts: every equally short way (e.g. Assassin via Ghost or Dark), so each of their parts counts as a pick
+    if(best) best.alts=alts; res[e.name]=best; }
   return res;
 }
 const buildableSet=P=>new Set(Object.keys(P).filter(n=>P[n].total===0));
@@ -698,13 +690,16 @@ function passFilters(e){
 }
 function pickCard(s,top,P){
   // one row per target: what of the run it uses (orange) and what is still missing once this pick is taken (red)
-  const row=(e,cls)=>{ const b=P[e.name]; const have=Object.keys(b.req).filter(k=>ui.sel[k]); const need=[];
-    for(const k in b.missing) for(let j=b.missing[k]-(k===s.x?1:0);j>0;j--) need.push(k);
+  const row=({e,w,ws},cls)=>{ const have=Object.keys(w.req).filter(k=>ui.sel[k]);
+    // what is left after this pick, per equally short way; different leftovers are alternatives ("Ghost or Dark")
+    const needs=[]; for(const v of ws){ const n=[]; for(const k in v.missing) for(let j=v.missing[k]-(k===s.x?1:0);j>0;j--) n.push(k);
+      if(n.length&&!needs.some(o=>o.join()===n.join())) needs.push(n); }
     const sp=(k,c)=>`<span class="si ${c}">${mini(k)}</span>`;
-    return `<div class="pr ${cls} ${have.length?'run':''}" data-open="${esc(e.name)}">${mini(e.name)}<span class="prn">${esc(nm(e.name))}</span><span class="prp">${have.length?`<span class="prl h">${T('pWith')}</span>${have.map(k=>sp(k,'have')).join('')}`:''}${need.length?`<span class="prl">${T('pStill')}</span>${need.slice(0,3).map(k=>sp(k,'need')).join('')}${need.length>3?`<span class="prl">+${need.length-3}</span>`:''}`:''}</span></div>`; };
+    const needHtml=n=>n.slice(0,3).map(k=>sp(k,'need')).join('')+(n.length>3?`<span class="prl">+${n.length-3}</span>`:'');
+    return `<div class="pr ${cls} ${have.length?'run':''}" data-open="${esc(e.name)}">${mini(e.name)}<span class="prn">${esc(nm(e.name))}</span><span class="prp">${have.length?`<span class="prl h">${T('pWith')}</span>${have.map(k=>sp(k,'have')).join('')}`:''}${needs.length?`<span class="prl">${T('pStill')}</span>${needs.slice(0,3).map(needHtml).join(`<span class="prl">${T('pOr')}</span>`)}`:''}</span></div>`; };
   const more=n=>n>0?`<span class="pc more">${T('pMore')(n)}</span>`:'';
-  const direct=`<div class="area direct"><div class="ml ok">${T('direct')}</div>${s.direct.length?`<div class="plist">${s.direct.slice(0,4).map(e=>row(e,'d')).join('')}${more(s.direct.length-4)}</div>`:`<span class="none">${T('noneYet')}</span>`}</div>`;
-  const near=s.near.length?`<div class="area near"><div class="ml warn">${T('near')}</div><div class="plist">${s.near.slice(0,4).map(e=>row(e,'n')).join('')}${more(s.near.length-4)}</div></div>`:'';
+  const direct=s.direct.length?`<div class="area direct"><div class="ml ok">${T('direct')}</div><div class="plist">${s.direct.slice(0,4).map(t=>row(t,'d')).join('')}${more(s.direct.length-4)}</div></div>`:'';
+  const near=s.near.length?`<div class="area near"><div class="ml warn">${T('near')}</div><div class="plist">${s.near.slice(0,4).map(t=>row(t,'n')).join('')}${more(s.near.length-4)}</div></div>`:'';
   return `<div class="card pick">
     <div class="ch"><div class="big" data-open="${esc(s.x)}"><img class="sprite" src="${IMG[s.x]}" alt=""></div>
       <div class="ct"><div class="name" data-open="${esc(s.x)}">${esc(nm(s.x))}</div><button class="btn solid takebtn" data-ing="${esc(s.x)}">+ ${T('selectBtn')}</button></div></div>
@@ -726,12 +721,16 @@ function renderMain(){
   const nSel=selCount();
   const score={};
   const chainOf=e=>DATA.evos.filter(m=>!done.has(m.id)&&m!==e&&P[m.name].how&&P[m.name].how[e.name]).length;
-  const inRun=n=>Object.keys(P[n].req).filter(k=>sel.has(k)).length;
-  for(const e of DATA.evos){ if(done.has(e.id)) continue; const b=P[e.name]; if(!b||b.total===0) continue;
-    for(const x in b.missing){ const s=(score[x]=score[x]||{x,direct:[],near:[],chain:{},chainSum:0,nearSum:0,runNear:0}); if(b.total===1){ s.direct.push(e); const c=chainOf(e); if(c){ s.chain[e.name]=c; s.chainSum+=c; } } else { s.near.push(e); s.nearSum+=1/(b.total-1); if(inRun(e.name)) s.runNear++; } } }
+  const inRun=w=>Object.keys(w.req).filter(k=>sel.has(k)).length;
+  // targets are {e, w}: the evolution and the way to build it that uses this pick
+  for(const e of DATA.evos){ if(done.has(e.id)) continue; const b=P[e.name]; if(!b||b.total===0) continue; const seen=new Set();
+    for(const w of b.alts) for(const x in w.missing){ if(seen.has(x)) continue; seen.add(x);
+      const s=(score[x]=score[x]||{x,direct:[],near:[],chain:{},chainSum:0,nearSum:0,runSum:0}); const t={e,w,ws:b.alts.filter(v=>v.missing[x])};
+      if(w.total===1){ s.direct.push(t); const c=chainOf(e); if(c){ s.chain[e.name]=c; s.chainSum+=c; } } else { s.near.push(t); s.nearSum+=1/(w.total-1); if(inRun(w)) s.runSum+=1/(w.total-1); } } }
   // closer targets first (a target one pick away after this one outweighs one that still needs three); on a tie, the one building on the run
-  Object.values(score).forEach(s=>s.near.sort((a,b)=>P[a.name].total-P[b.name].total||inRun(b.name)-inRun(a.name)||tierOrder(a)-tierOrder(b)));
-  const picks=Object.values(score).filter(s=>!sel.has(s.x)).sort((a,b)=>b.direct.length-a.direct.length||b.chainSum-a.chainSum||b.nearSum-a.nearSum||b.runNear-a.runNear||b.near.length-a.near.length||nm(a.x).localeCompare(nm(b.x)));
+  Object.values(score).forEach(s=>s.near.sort((a,b)=>a.w.total-b.w.total||inRun(b.w)-inRun(a.w)||tierOrder(a.e)-tierOrder(b.e)));
+  // picks that build on the current run come before picks that only open fresh routes
+  const picks=Object.values(score).filter(s=>!sel.has(s.x)).sort((a,b)=>b.direct.length-a.direct.length||b.chainSum-a.chainSum||b.runSum-a.runSum||b.nearSum-a.nearSum||b.near.length-a.near.length||nm(a.x).localeCompare(nm(b.x)));
   const pb=picks.filter(s=>!isPassive(s.x)), pp=picks.filter(s=>isPassive(s.x));
   const lim=nSel?9:6;
   const pickHtml=picks.length?`<section class="res"><h2>${T('picks')} <span class="n">${T('picksTag')}</span><small>${nSel?T('picksHelpSel'):T('picksHelpEmpty')}</small></h2>
