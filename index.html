@@ -201,6 +201,13 @@ html,body{overflow-anchor:none}
 .card .big img{width:72px;height:72px}
 .card .tick{position:absolute;right:-6px;top:-6px;width:24px;height:24px;border-radius:50%;background:var(--ok2);color:#fff;text-align:center;line-height:24px;font-weight:700;font-size:14px;border:2px solid var(--bg2);display:none}
 .card .area{border-top:2px solid var(--line2);padding:10px 0;display:flex;flex-direction:column;gap:6px}
+.card .area.cond .cx{font-size:12px;color:var(--fg2);line-height:1.4}
+.ctr{display:flex;flex-wrap:wrap;gap:4px 12px}
+.ctr .dn,.cnow .dn{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--fg);font-size:12px}
+.ctr img,.cnow img{width:24px;height:24px;border-radius:4px}
+.cnow{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:8px 10px;border-radius:6px;background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.cnow b{font-weight:600;color:var(--warn)}
+.dcond .area.cond{border-top:2px solid var(--line2);margin-top:14px;padding-top:12px;display:flex;flex-direction:column;gap:6px}
 .card .area.note{font-size:11px;color:var(--fg3);line-height:1.3}
 .card .area.cx{font-size:11px;color:var(--fg2);line-height:1.4}
 .card .ml{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--fg3)}
@@ -278,6 +285,7 @@ html,body{overflow-anchor:none}
 .pc .pcn{font-size:12px;line-height:1.15;color:var(--fg2);min-width:0;overflow-wrap:anywhere}
 .pc.d img{width:34px;height:34px}
 .pc.d .pcn{color:var(--fg);font-weight:600;font-size:13px}
+.morebtn{margin-top:10px}
 .pc.more{color:var(--fg3);font-size:13px;padding:4px 10px}
 .plist{gap:6px}
 .pr{display:grid;grid-template-columns:48px minmax(0,1fr);column-gap:12px;row-gap:8px;align-items:center;cursor:pointer;border-radius:8px;padding:10px}
@@ -375,10 +383,12 @@ footer .sp{flex:1}
 <div class="tools" id="tools">
   <div class="seg" id="tierSeg">
     <button data-t="all" data-i="all">Alles</button>
+    <button data-t="b" data-i="balls">Bälle</button>
     <button data-t="1">Tier 1</button>
     <button data-t="2">Tier 2</button>
     <button data-t="3">Tier 3</button>
-    <button data-t="p" data-i="passives">Passives</button>
+    <button data-t="bp" data-i="passives">Passive</button>
+    <button data-t="p" data-i="pEvos">Passiv-Evolutionen</button>
   </div>
   <div class="seg" id="filter">
     <button data-f="all" data-i="fAll">Alle</button>
@@ -429,7 +439,7 @@ const IMG = {"Bleed": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAM
 const DE = {"Bleed": "Blutung", "Brood Mother": "Brutmutter", "Burn": "Feuer", "Laser (Horizontal)": "Laser (horizontal)", "Laser (Vertical)": "Laser (vertikal)", "Light": "Licht", "Lightning": "Blitze", "Poison": "Gift", "Cell": "Zelle", "Freeze": "Eis", "Wind": "Wind", "Ghost": "Geist", "Dark": "Dunkelheit", "Vampire": "Vampir", "Charm": "Charme", "Egg Sac": "Eiersack", "Iron": "Eisen", "Stone": "Stein", "Time": "Zeit", "Earthquake": "Erdbeben", "Flesh": "Fleisch", "Assassin": "Attentäter", "Blizzard": "Schneesturm", "Bomb": "Bombe", "Freeze Ray": "Eisstrahl", "Frozen Flame": "Frostflamme", "Glacier": "Gletscher", "Hemorrhage": "Ausbluten", "Holy Laser": "Heiliger Laser", "Inferno": "Inferno", "Leech": "Blutsauger", "Lightning Rod": "Blitzableiter", "Magma": "Lava", "Mosquito King": "Mückenkönig", "Mosquito Swarm": "Mückenschwarm", "Noxious": "Gifthauch", "Radiation Beam": "Gebündelte Strahlung", "Sandstorm": "Sandsturm", "Shotgun": "Schrotflinte", "Soul Sucker": "Seelenräuber", "Spider Queen": "Spinnenkönigin", "Storm": "Sturm", "Swamp": "Sumpf", "Vampire Lord": "Vampirfürst", "Virus": "Virus", "Wraith": "Gespenst", "Banished Flame": "Verbannte Flamme", "Banshee": "Banshee", "Berserk": "Berserker", "Black Hole": "Schwarzes Loch", "Brimstone": "Schwefel", "Catapult": "Katapult", "Drill": "Bohrer", "Elemental": "Elementar", "Erosion": "Erosion", "Fireworks": "Feuerwerk", "Flash": "Blitzlicht", "Flesh Mound": "Fleischhaufen", "Flicker": "Flackern", "Heart Swallower": "Herzschlucker", "Incubus": "Inkubus", "Succubus": "Sukkubus", "Landslide": "Erdrutsch", "Laser Beam": "Laserstrahl", "Laser Cutter": "Laserschneider", "Lightning Bug": "Glühwürmchen", "Lovestruck": "Verliebt", "Maggot": "Made", "Mosquito Kingdom": "Mückenkönigreich", "Nosferatu": "Nosferatu", "Nuclear Bomb": "Atombombe", "Offspring": "Nachwuchs", "Overgrowth": "Wildwuchs", "Petrify": "Versteinerung", "Phantom": "Phantom", "Reaper": "Sensenmann", "Sacrifice": "Opfer", "Satan": "Satan", "Sniper": "Scharfschütze", "Steel": "Stahl", "Sun": "Sonne", "Time Bomb": "Zeitbombe", "Timestop": "Zeitstopp", "Tumor": "Tumor", "Venom": "Schlangengift", "Voluptuous Egg Sac": "Üppiger Eiersack", "Warp": "Warp", "X Ray": "Röntgen", "Zombie": "Zombie", "Armageddon": "Armageddon", "Tormenters Mask": "Peinigermaske", "Odiferous Shell": "Stinkender Panzer", "Full Metal Rapier": "Vollmetall-Rapier", "Phantom Regalia": "Phantomgewand", "Argent Stopwatch": "Silberne Stoppuhr", "Soul Reaver": "Seelenschnitter", "Arrow of Fate": "Pfeil des Schicksals", "Cornucopia": "Füllhorn", "Wings of the Anointed": "Flügel der Gesalbten", "Grotesque Artillery": "Groteske Artillerie", "Inglorious Hammer": "Unrühmlicher Hammer", "Remote Detonator": "Fernzünder", "Windweaver": "Windweber", "Ardent Tire": "Glühender Reifen", "Gracious Impaler": "Gnädiger Pfähler", "Deadeye's Cross": "Scharfschützenkreuz", "Deadeye's Impaler": "Scharfschützenpfähler", "Spiked Collar": "Stachelhalsband", "Crown of Thorns": "Dornenkrone", "Wretched Onion": "Elende Zwiebel", "Breastplate": "Brustpanzer", "Iron Onesie": "Eisenstrampler", "Sword Breaker": "Schwertbrecher", "Ghostly Corset": "Geisterkorsett", "Ethereal Cloak": "Ätherischer Umhang", "Hourglass": "Sanduhr", "Silver Bullet": "Silberkugel", "Vampiric Sword": "Vampirschwert", "Everflowing Goblet": "Ewig fließender Kelch", "Lover's Quiver": "Liebesköcher", "Hand Mirror": "Handspiegel", "Baby Rattle": "Babyrassel", "War Horn": "Kriegshorn", "Radiant Feather": "Strahlende Feder", "Fleet Feet": "Flinke Füße", "Turret": "Geschützturm", "Hand Fan": "Handfächer", "Platinum Dumbbell": "Platinhantel", "Upturned Hatchet": "Umgedrehtes Beil", "Pressure Valve": "Druckventil", "Magnet": "Magnet", "Bottled Tornado": "Tornado im Glas", "Slingshot": "Steinschleuder", "Wagon Wheel": "Wagenrad", "Rubber Headband": "Gummistirnband", "Reacher's Spear": "Speer des Greifers", "Deadeye's Amulet": "Scharfschützenamulett", "Diamond Hilted Dagger": "Dolch mit Diamantgriff", "Emerald Hilted Dagger": "Dolch mit Smaragdgriff", "Ruby Hilted Dagger": "Dolch mit Rubingriff", "Sapphire Hilted Dagger": "Dolch mit Saphirgriff"};
 const SHORT={'Laser (horizontal)':'Laser (hor.)','Laser (vertikal)':'Laser (vert.)','Laser (Horizontal)':'Laser (hor.)','Laser (Vertical)':'Laser (vert.)'};
 const I18N={
- de:{title:'Evolutions-Tracker',all:'Alles',passives:'Passives',fAll:'Alle',fMissing:'Fehlt noch',fDone:'Gefunden',nAll:'Alle Inhalte',nBase:'Nur Basisspiel',search:'Name suchen (deutsch oder englisch) …',
+ de:{title:'Evolutions-Tracker',all:'Alles',passives:'Passive',fAll:'Alle',fMissing:'Fehlt noch',fDone:'Gefunden',nAll:'Alle Inhalte',nBase:'Nur Basisspiel',search:'Name suchen (deutsch oder englisch) …',
   total:'Gesamt',tier:'Tier',myRun:'Mein Durchlauf',myRunHelp:'Wähle alles aus, was du gerade im Run hast: Basisbälle, fertige Evolutionen, Passives. Darunter siehst du, was du jetzt mergen solltest, was du als nächstes nehmen solltest und was noch möglich wäre.',
   clearSel:'Auswahl leeren',baseBalls:'Basisbälle',evoIng:'Evolutionen, die als Zutat dienen',hide:'ausblenden',show:'einblenden',
   hintEmpty:'Bild antippen = im Durchlauf (orange mit Haken), nochmal = wieder raus. ⓘ-Leiste = Großansicht.',details:'Großansicht',take:'Nehmen',inRunTip:'im Durchlauf, antippen zum Entfernen',mergeNow:'Jetzt mergen',planHead:'Reihenfolge',thenChain:'danach →',chainLbl:n=>`${n} Merges nacheinander`,goal:'Ziel',step:'Schritt',stepNow:'jetzt möglich',stepAfter:i=>`erst nach Schritt ${i}`,chainExplain:n=>`Noch nicht direkt baubar: dafür sind ${n} Merges nacheinander nötig. Die Zutaten für Schritt 1 hast du in der Hand.`,times:n=>`${n}× nötig`,again:'nochmal, nach dem Merge',pickStep:(n,a)=>a?`${n} erneut nehmen (wurde verbraucht)`:`${n} nehmen`,newForYou1:'fehlt dir noch',neededFor:'wird gebraucht für',thenMissing:n=>'dann sofort baubar',thenNeed:'dann noch:',noGain:'nichts Neues, macht aber zwei Slots frei',levelFirst:'Diese Bälle auf Level 3 bringen und mergen (in dieser Reihenfolge):',
@@ -443,17 +453,17 @@ const I18N={
   possible:'Was noch möglich wäre',possibleHelp:'Noch nicht gefundene Evolutionen, sortiert nach der Zahl der Picks, die dir noch fehlen. Darunter der Plan in Reihenfolge: Ein Ball existiert nur einmal, deshalb muss ein verbrauchter Ball erneut genommen werden.',
   possibleEmpty:'<b>Nichts offen.</b> Alles, was noch fehlt, ist mit deiner Auswahl schon baubar.',missing:'fehlt dir:',
   shown:n=>`${n} angezeigt`,legendCards:'Bild oder Name antippen = Großansicht · Schalter = gefunden',complete:'✓ komplett',missOf:(m,n)=>`${m} von ${n} fehlen`,
-  tierSub:{1:'aus zwei Basisbällen (Elementar: vier)',2:'aus einer Tier-1-Evolution und einem Basisball',3:'aus zwei oder drei Evolutionen',p:'aus zwei Basis-Passives (Scharfschützenkreuz: vier)'},
+  tierSub:{b:'zählen fürs Lexikon, sobald du sie einmal im Run hattest',bp:'zählen, sobald du sie einmal aufgenommen hast; manche erscheinen nur unter Bedingungen',1:'aus zwei Basisbällen (Elementar: vier)',2:'aus einer Tier-1-Evolution und einem Basisball',3:'aus zwei oder drei Evolutionen',p:'aus zwei Basis-Passives (Scharfschützenkreuz: vier)'},
   allFound:'<b>Alles gefunden!</b> Hier fehlt nichts mehr.',nothing:'Nichts gefunden. Filter oder Suche anpassen.',found:'gefunden',foundLbl:'Gefunden',notFound:'fehlt noch',
   markFound:'Als gefunden markieren',markMissing:'Als fehlend markieren',stInRun:'im Durchlauf',stNotInRun:'nicht im Durchlauf',outRun:'Aus dem Durchlauf entfernen',addRun:'Zum Durchlauf hinzufügen',selectBtn:'Auswählen',noneYet:'noch nichts',
-  evolution:'Evolution',baseBall:'Basisball',basePassive:'Basis-Passive',recipe:'Rezept',craftIng:'Zutaten herstellen',usedFor:'Wird gebraucht für',with:'mit',close:'Schließen',
+  evolution:'Evolution',baseBall:'Basisball',basePassive:'Passiv',recipe:'Rezept',craftIng:'Zutaten herstellen',usedFor:'Wird gebraucht für',with:'mit',close:'Schließen',
   ioBtn:'Fortschritt sichern / übertragen',reset:'Alles zurücksetzen',resetArm:'Wirklich? Nochmal tippen zum Löschen',ioHelp:'Alles wird automatisch im Browser gespeichert (Fortschritt, Durchlauf, Verlauf). Dieser Code enthält das Gleiche zum Übertragen auf ein anderes Gerät oder in eine neue Version der Datei: kopieren und dort einfügen.',loadedRun:n=>`Durchlauf mit ${n} Teilen geladen`,
   copy:'Code kopieren',load:'Code laden',copied:'Kopiert.',selected:'Markiert. Jetzt mit Strg+C / Cmd+C kopieren.',loaded:n=>`${n} Einträge geladen.`,badCode:'Code nicht lesbar. Bitte den kompletten Code einfügen.',
-  footAll:'Alles entdeckt. Glückwunsch!',footMiss:(m,n)=>`Dir fehlen noch ${m} von ${n} Evolutionen.`,
+  footAll:'Alles entdeckt. Glückwunsch!',footMiss:(m,n)=>`Dir fehlen noch ${m} von ${n} Lexikon-Einträgen.`,balls:'Bälle',pEvos:'Passiv-Evolutionen',showAll:n=>`Alle ${n} anzeigen`,showLess:'Weniger anzeigen',condTag:'Bedingung',condHead:'Erscheint nur unter Bedingung',condNow:'Kann jetzt im Level-up auftauchen (fehlt dir noch):',
 otherInRun:'Weitere Evolutionen im Durchlauf (keine Zutat, belegen aber einen Slot)',hiddenByFilter:n=>`${n} durch Filter ausgeblendet`,
   undo:'Rückgängig',tInRun:'im Durchlauf',tNowBuildable:'jetzt baubar',tShow:'Anzeigen',tMerged:'gemergt',tNext:'Nächster Schritt damit:',tNoNext:'Damit fehlt dir nichts mehr. Slot frei.',tNotIng:'keine Zutat → „Weitere Evolutionen“',tShowRun:'Zum Durchlauf',uDone:'Zurückgenommen:',uBackIn:'wieder im Durchlauf:',uOut:'aus dem Durchlauf:',uUnfound:'wieder als fehlend:',uFound:'wieder als gefunden:',undoHere:'bis hierhin zurück',history:'Verlauf',hAdd:n=>`${n} in den Durchlauf`,hRemove:n=>`${n} aus dem Durchlauf`,hMerge:n=>`${n} gemergt`,hMark:n=>`${n} als gefunden markiert`,hUnmark:n=>`${n} als fehlend markiert`,hClear:'Auswahl geleert',hLoad:'Fortschritt geladen',hReset:'Alles zurückgesetzt',
   miTitle:'Was beim Mergen passiert',miBody:'Die Zutaten verlassen deinen Durchlauf, das Ergebnis kommt hinein und wird automatisch als <b>gefunden</b> markiert. Ist das Ergebnis selbst keine Zutat, taucht es unter „Weitere Evolutionen im Durchlauf“ auf. Jeder Schritt lässt sich über „Rückgängig“ zurücknehmen. Dieser Hinweis erscheint nur einmal.',miOk:'Verstanden, mergen',miCancel:'Abbrechen',
-  credits:'Inoffizielles Fan-Tool. Sprites und Daten aus dem „Ultimate Guide of Evolutions“ (v1.301) von CoupDeGlace, deutsche Namen teilweise aus der Spiel-Lokalisierung. BALL x PIT © Kenny Sun / Devolver Digital. Fortschritt wird nur in deinem Browser gespeichert.'},
+  credits:'Inoffizielles Fan-Tool. Sprites und Daten aus dem „Ultimate Guide of Evolutions“ (v1.301) von CoupDeGlace, deutsche Namen teilweise aus der Spiel-Lokalisierung. Lexikon-Einträge und Bedingungen laut BALL x PIT Wiki. BALL x PIT © Kenny Sun / Devolver Digital. Fortschritt wird nur in deinem Browser gespeichert.'},
  en:{title:'Evolution Tracker',all:'All',passives:'Passives',fAll:'All',fMissing:'Missing',fDone:'Found',nAll:'All content',nBase:'Base game only',search:'Search name (English or German) …',
   total:'Total',tier:'Tier',myRun:'My run',myRunHelp:'Select everything you currently have in your run: base balls, finished evolutions, passives. Below you will see what to merge now, what to pick next and what is still possible.',
   clearSel:'Clear selection',baseBalls:'Base balls',evoIng:'Evolutions used as ingredients',hide:'hide',show:'show',
@@ -468,19 +478,19 @@ otherInRun:'Weitere Evolutionen im Durchlauf (keine Zutat, belegen aber einen Sl
   possible:'What is still possible',possibleHelp:'Evolutions not found yet, sorted by the number of picks you still need. Below each, the plan in order: a ball exists only once, so a consumed ball has to be taken again.',
   possibleEmpty:'<b>Nothing open.</b> Everything still missing is already buildable with your selection.',missing:'you need:',
   shown:n=>`${n} shown`,legendCards:'Tap image or name = detail view · switch = found',complete:'✓ complete',missOf:(m,n)=>`${m} of ${n} missing`,
-  tierSub:{1:'from two base balls (Elemental: four)',2:'from a tier 1 evolution and a base ball',3:'from two or three evolutions',p:"from two base passives (Deadeye's Cross: four)"},
+  tierSub:{b:'count for the encyclopedia once you have had them in a run',bp:'count once picked up; some only appear under conditions',1:'from two base balls (Elemental: four)',2:'from a tier 1 evolution and a base ball',3:'from two or three evolutions',p:"from two base passives (Deadeye's Cross: four)"},
   allFound:'<b>All found!</b> Nothing missing here.',nothing:'Nothing found. Adjust filter or search.',found:'found',foundLbl:'Found',notFound:'missing',
   markFound:'Mark as found',markMissing:'Mark as missing',stInRun:'in run',stNotInRun:'not in run',outRun:'Remove from run',addRun:'Add to run',selectBtn:'Select',noneYet:'nothing yet',
   evolution:'Evolution',baseBall:'Base ball',basePassive:'Base passive',recipe:'Recipe',craftIng:'Crafting the ingredients',usedFor:'Used for',with:'with',close:'Close',
   ioBtn:'Save / transfer progress',reset:'Reset everything',resetArm:'Really? Tap again to delete',ioHelp:'Everything is saved automatically in your browser (progress, run, history). This code contains the same for transferring to another device or a new version of the file: copy it and paste it there.',loadedRun:n=>`run with ${n} parts loaded`,
   copy:'Copy code',load:'Load code',copied:'Copied.',selected:'Selected. Now copy with Ctrl+C / Cmd+C.',loaded:n=>`${n} entries loaded.`,badCode:'Code not readable. Please paste the complete code.',
-  footAll:'Everything discovered. Congratulations!',footMiss:(m,n)=>`You are still missing ${m} of ${n} evolutions.`,
+  footAll:'Everything discovered. Congratulations!',footMiss:(m,n)=>`You are still missing ${m} of ${n} encyclopedia entries.`,balls:'Balls',pEvos:'Passive evolutions',showAll:n=>`Show all ${n}`,showLess:'Show fewer',condTag:'Condition',condHead:'Only appears under a condition',condNow:'Can show up on level-up now (still missing):',
 otherInRun:'Other evolutions in the run (not an ingredient, but they take a slot)',hiddenByFilter:n=>`${n} hidden by filter`,
   undo:'Undo',tInRun:'in run',tNowBuildable:'buildable now',tShow:'Show',tMerged:'merged',tNext:'Next step with it:',tNoNext:'Nothing missing uses it. Slot free.',tNotIng:'not an ingredient → “Other evolutions”',tShowRun:'To run',uDone:'Undone:',uBackIn:'back in run:',uOut:'out of run:',uUnfound:'missing again:',uFound:'found again:',undoHere:'back to here',history:'History',hAdd:n=>`${n} added to run`,hRemove:n=>`${n} removed from run`,hMerge:n=>`${n} merged`,hMark:n=>`${n} marked found`,hUnmark:n=>`${n} marked missing`,hClear:'Selection cleared',hLoad:'Progress loaded',hReset:'Everything reset',
   miTitle:'What happens when you merge',miBody:'The parts leave your run, the result joins it and is automatically marked as <b>found</b>. If the result is not an ingredient itself, it shows up under “Other evolutions in the run”. Every step can be undone with “Undo”. This note appears only once.',miOk:'Got it, merge',miCancel:'Cancel',
-  credits:'Unofficial fan tool. Sprites and data from the "Ultimate Guide of Evolutions" (v1.301) by CoupDeGlace. BALL x PIT © Kenny Sun / Devolver Digital. Progress is stored only in your browser.'}
+  credits:'Unofficial fan tool. Sprites and data from the "Ultimate Guide of Evolutions" (v1.301) by CoupDeGlace. Encyclopedia entries and spawn conditions per the BALL x PIT wiki. BALL x PIT © Kenny Sun / Devolver Digital. Progress is stored only in your browser.'}
 };
-const TIERS=[{t:1},{t:2},{t:3},{t:'p'}];
+const TIERS=[{t:'b'},{t:1},{t:2},{t:3},{t:'bp'},{t:'p'}];
 const KEY='bxp-evo-done-v1';
 let done=new Set();
 try{ const s=localStorage.getItem(KEY); if(s) done=new Set(JSON.parse(s)); }catch(e){}
@@ -493,16 +503,40 @@ const selNames=()=>Object.keys(ui.sel);
 function addSel(n,delta){ if(delta>0) ui.sel[n]=1; else delete ui.sel[n]; }
 function saveUi(){ try{localStorage.setItem(KEY+'-ui',JSON.stringify({filter:ui.filter,lang:ui.lang,tier:ui.tier,showP:ui.showP,showE:ui.showE,showPB:ui.showPB,showPP:ui.showPP,showOld:ui.showOld,mode:ui.mode,sel:ui.sel}))}catch(e){} }
 const T=k=>I18N[ui.lang][k];
-const tierLabel=t=>t==='p'?T('passives'):`${T('tier')} ${t}`;
+const tierLabel=t=>t==='p'?T('pEvos'):t==='bp'?T('passives'):t==='b'?T('balls'):`${T('tier')} ${t}`;
 
 const byName=Object.fromEntries(DATA.evos.map(e=>[e.name,e]));
 const byId=Object.fromEntries(DATA.evos.map(e=>[e.id,e]));
 const isEvo=n=>!!byName[n];
 const BASE_P=[]; DATA.evos.filter(e=>e.tier==='p').forEach(e=>e.recipes.forEach(r=>r.forEach(i=>{ if(!isEvo(i)&&!BASE_P.includes(i)) BASE_P.push(i); })));
 const isPassive=n=>BASE_P.includes(n)||(isEvo(n)&&byName[n].tier==='p');
+// Encyclopedia entries that are not evolutions (base balls, every base passive): Scholar needs them too. List and spawn conditions per the BALL x PIT wiki.
+const PASSIVES=["Archer's Effigy", "Artificial Heart", "Baby Rattle", "Bandage Roll", "Bottled Tornado", "Breastplate", "Crown of Thorns", "Cursed Elixir", "Deadeye's Amulet", "Diamond Hilted Dagger", "Dynamite", "Emerald Hilted Dagger", "Ethereal Cloak", "Everflowing Goblet", "Eye of the Beholder", "Fleet Feet", "Frozen Spike", "Gemspring", "Ghostly Corset", "Ghostly Shield", "Golden Bull", "Hand Fan", "Hand Mirror", "Healer's Effigy", "Hourglass", "Iron Onesie", "Kiss of Death", "Lover's Quiver", "Magic Staff", "Magnet", "Midnight Oil", "Platinum Dumbbell", "Pressure Valve", "Protective Charm", "Radiant Feather", "Reacher's Spear", "Rubber Headband", "Ruby Hilted Dagger", "Sapphire Hilted Dagger", "Shortbow", "Silver Blindfold", "Silver Bullet", "Slingshot", "Spiked Collar", "Stone Effigy", "Sword Breaker", "Traitor's Cowl", "Turret", "Upturned Hatchet", "Vampiric Sword", "Voodoo Doll", "Wagon Wheel", "War Horn", "Wretched Onion"];
+const NEW_BASE=new Set(['Flesh','Platinum Dumbbell']);
+const EFFIGIES=["Archer's Effigy","Healer's Effigy","Stone Effigy"];
+const COND={
+ 'Midnight Oil':{trig:['Burn'],de:'Erscheint nur, wenn du einen Ball mit Feuer-Effekt hast.',en:'Only appears while you have a ball that applies Burn.'},
+ 'Frozen Spike':{trig:['Freeze'],de:'Erscheint nur, wenn du einen Ball mit Eis-Effekt hast.',en:'Only appears while you have a ball that applies Freeze.'},
+ 'Kiss of Death':{trig:['Charm'],de:'Erscheint nur, wenn du einen Ball mit Charme-Effekt hast.',en:'Only appears while you have a ball that applies Charm.'},
+ 'Cursed Elixir':{trig:['Poison'],de:'Erscheint nur, wenn du einen Ball mit Gift-Effekt hast.',en:'Only appears while you have a ball that applies Poison.'},
+ 'Voodoo Doll':{trig:['Phantom','Sacrifice','Incubus'],de:'Erscheint nur, wenn du einen Ball mit Fluch-Effekt hast, z. B. Phantom, Opfer oder Inkubus.',en:'Only appears while you have a ball that applies Curse, e.g. Phantom, Sacrifice or Incubus.'},
+ 'Silver Blindfold':{trig:['Light'],de:'Laut Spielern nur mit dem Licht-Ball.',en:'Players report it only appears with the Light ball.'},
+ 'Artificial Heart':{trig:EFFIGIES,de:'Erscheint nur mit einem Passiv, das dir Verbündete aufs Feld stellt (z. B. ein Effigy).',en:'Only appears with a passive that puts allies on the field (e.g. an effigy).'},
+ 'Ghostly Shield':{trig:EFFIGIES,de:'Erscheint nur mit einem Passiv, das dir Verbündete aufs Feld stellt (z. B. ein Effigy).',en:'Only appears with a passive that puts allies on the field (e.g. an effigy).'},
+ "Traitor's Cowl":{trig:EFFIGIES,de:'Erscheint nur mit einem Passiv, das dir Stein-Verbündete gibt (z. B. Archer\'s Effigy).',en:'Only appears with a passive that gives you stone allies (e.g. Archer\'s Effigy).'}
+};
+const slug=x=>x.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const ENTRIES=[...[...DATA.base].sort().map(n=>({name:n,tier:'b',kind:'ball'})),...PASSIVES.map(n=>({name:n,tier:'bp',kind:'passive'}))]
+  .map(x=>({...x,id:x.kind+'-'+slug(x.name),new:NEW_BASE.has(x.name),recipes:[]}));
+const byEntry=Object.fromEntries(ENTRIES.map(x=>[x.name,x])); ENTRIES.forEach(x=>byId[x.id]=x);
+const ALL=[...DATA.evos,...ENTRIES];
+// run picker passives: recipe ingredients plus the effigies that unlock conditional passives
+const PICK_P=[...BASE_P,...EFFIGIES.filter(n=>!BASE_P.includes(n))];
 const usedIn={}; DATA.evos.forEach(e=>e.recipes.forEach(r=>r.forEach(i=>{ (usedIn[i]=usedIn[i]||[]); if(!usedIn[i].some(u=>u.e===e)) usedIn[i].push({e,r}); })));
 const tierOrder=e=>({1:1,2:2,3:3,p:4})[e.tier];
 const EVO_ING=DATA.evos.filter(e=>usedIn[e.name]).sort((a,b)=>tierOrder(a)-tierOrder(b)||a.name.localeCompare(b.name)).map(e=>e.name);
+const PH={};
+const spr=n=>IMG[n]||PH[n]||(PH[n]='data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect width="80" height="80" rx="8" fill="#1e181a"/><text x="40" y="50" font-family="monospace" font-size="26" font-weight="700" text-anchor="middle" fill="#d08a52">${n.replace(/[^A-Za-z ]/g,'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</text></svg>`));
 const nm=n=>ui.lang==='de'?(DE[n]||n):n;
 const alt=n=>ui.lang==='de'?n:(DE[n]||n);
 const $=s=>document.querySelector(s);
@@ -532,7 +566,7 @@ function plan(inv){ const memo={}, res={};
   return res;
 }
 const buildableSet=P=>new Set(Object.keys(P).filter(n=>P[n].total===0));
-function ingHtml(i,cls=''){ const n=nm(i); return `<span class="ing ${cls}" data-open="${esc(i)}" title="${esc(n)}"><img class="sprite" src="${IMG[i]}" alt=""><span>${esc(SHORT[n]||n)}</span></span>`; }
+function ingHtml(i,cls=''){ const n=nm(i); return `<span class="ing ${cls}" data-open="${esc(i)}" title="${esc(n)}"><img class="sprite" src="${spr(i)}" alt=""><span>${esc(SHORT[n]||n)}</span></span>`; }
 function recipeHtml(r,ri,hl,missing,multi){ return `${ri>0?`<div class="orline"><span>${ui.lang==='de'?'oder':'or'}</span></div>`:''}<div class="recipe">${r.map(i=>ingHtml(i,(hl&&hl.has(i)?'hl ':'')+(missing&&missing[i]?"miss":""))).join('<span class="plus">+</span>')}</div>`; }
 function subTree(e,how,depth,seen){
   seen=seen||new Set(); const lines=[]; const OR=ui.lang==='de'?'oder':'or';
@@ -541,9 +575,9 @@ function subTree(e,how,depth,seen){
   for(const i of evoIngs){ if(seen.has(i)) continue; seen.add(i); const se=byName[i];
     const srecs=how&&how[i]?[how[i]]:se.recipes;
     srecs.forEach((r,ri)=>{
-      const body=r.map(x=>`<img class="sprite" src="${IMG[x]}" alt="" data-open="${esc(x)}" title="${esc(nm(x))}">`).join('<span class="plus">+</span>');
+      const body=r.map(x=>`<img class="sprite" src="${spr(x)}" alt="" data-open="${esc(x)}" title="${esc(nm(x))}">`).join('<span class="plus">+</span>');
       const names=r.map(x=>nm(x)).join(' + ');
-      lines.push(`<div class="sl"><span class="nm ${ri>0?'rep':''}" data-open="${esc(i)}">${ri>0?'':`<img class="sprite" src="${IMG[i]}" alt="">${esc(nm(i))}${done.has(se.id)?`<span class="ok">✓ ${T('found')}</span>`:''}`}</span><span class="eq">=</span><span class="sb">${body}</span><span class="snames">${esc(names)}</span></div>`); });
+      lines.push(`<div class="sl"><span class="nm ${ri>0?'rep':''}" data-open="${esc(i)}">${ri>0?'':`<img class="sprite" src="${spr(i)}" alt="">${esc(nm(i))}${done.has(se.id)?`<span class="ok">✓ ${T('found')}</span>`:''}`}</span><span class="eq">=</span><span class="sb">${body}</span><span class="snames">${esc(names)}</span></div>`); });
     const deeper=subTree(se,how,depth+1,seen); if(deeper) lines.push(deeper);
   }
   return lines.length?`<div class="sub">${lines.join('')}</div>`:'';
@@ -553,7 +587,7 @@ function cardHtml(e,opt){ opt=opt||{};
   const recs=how&&how[e.name]?[how[e.name]]:e.recipes;
   const recipes=`<div class="area rec"><div class="recs">${recs.map((r,ri)=>recipeHtml(r,ri,hl,opt.missing)).join('')}</div>${opt.steps?'':subTree(e,how,0)}</div>`;
   let missing='';
-  if(opt.missing){ const ms=Object.keys(opt.missing); missing=`<div class="area"><div class="ml">${T('missing')}</div><div class="mlist">${ms.map(m=>`<span class="mi" data-open="${esc(m)}"><img class="sprite" src="${IMG[m]}" alt=""><b>${esc(nm(m))}${opt.missing[m]>1?` <i>(${T('times')(opt.missing[m])})</i>`:(ui.sel[m]?` <i>(${T('again')})</i>`:'')}</b></span>`).join('')}</div></div>`; }
+  if(opt.missing){ const ms=Object.keys(opt.missing); missing=`<div class="area"><div class="ml">${T('missing')}</div><div class="mlist">${ms.map(m=>`<span class="mi" data-open="${esc(m)}"><img class="sprite" src="${spr(m)}" alt=""><b>${esc(nm(m))}${opt.missing[m]>1?` <i>(${T('times')(opt.missing[m])})</i>`:(ui.sel[m]?` <i>(${T('again')})</i>`:'')}</b></span>`).join('')}</div></div>`; }
   const why=opt.why?`<div class="area why">${opt.why}</div>`:'';
   let steps='';
   if(opt.steps){ const nm_=opt.steps.filter(s=>s.t==='merge').length;
@@ -563,10 +597,19 @@ function cardHtml(e,opt){ opt=opt||{};
   const ckt=ui.mode==='lex'?`<div class="foot swrow"><button class="sw ${d?'on':''}" data-toggle="${e.id}" role="switch" aria-checked="${d}" title="${d?T('markMissing'):T('markFound')}"><span class="track"><span class="knob"></span></span><span class="swl">${T('foundLbl')}</span></button></div>`:'';
   const note=(ui.lang==='de'?e.note:e.noteEn);
   return `<div class="card ${d?'done':''} ${opt.merge?'mergeable':''} ${flash?'flash':''}" data-card="${e.id}">
-    <div class="ch"><div class="big" data-open="${esc(e.name)}"><img class="sprite" src="${IMG[e.name]}" alt=""><span class="tick">✓</span></div>
+    <div class="ch"><div class="big" data-open="${esc(e.name)}"><img class="sprite" src="${spr(e.name)}" alt=""><span class="tick">✓</span></div>
       <div class="ct"><div class="name" data-open="${esc(e.name)}">${esc(nm(e.name))}</div>${alt(e.name)!==nm(e.name)?`<div class="alt">${esc(alt(e.name))}</div>`:''}<div class="tags">${ui.mode==='run'?`<span class="badge ${d?'ok':'miss'}">${d?'✓ '+T('found'):T('notFoundYet')}</span>`:''}${e.new?`<span class="star" title="${T('natTitle')}">★ Naturalist</span>`:''}</div></div></div>
     ${recipes}${why}${opt.conflict||''}${missing}${steps}${note?`<div class="area note">${esc(note)}</div>`:''}${act}${ckt}</div>`;
 }
+// card for a base ball or base passive: found switch plus the spawn condition, if any
+function condHtml(n){ const c=COND[n]; if(!c) return '';
+  return `<div class="area cond"><div class="ml warn">${T('condHead')}</div><div class="cx">${esc(c[ui.lang])}</div><div class="ctr">${c.trig.map(t=>`<span class="dn" data-open="${esc(t)}">${mini(t)}${esc(nm(t))}</span>`).join('')}</div></div>`; }
+function entryCardHtml(x){ const d=done.has(x.id);
+  return `<div class="card ${d?'done':''}" data-card="${x.id}">
+    <div class="ch"><div class="big" data-open="${esc(x.name)}"><img class="sprite" src="${spr(x.name)}" alt=""><span class="tick">✓</span></div>
+      <div class="ct"><div class="kind">${x.kind==='ball'?T('baseBall'):T('basePassive')}</div><div class="name" data-open="${esc(x.name)}">${esc(nm(x.name))}</div>${alt(x.name)!==nm(x.name)?`<div class="alt">${esc(alt(x.name))}</div>`:''}<div class="tags">${x.new?`<span class="star" title="${T('natTitle')}">★ Naturalist</span>`:''}${COND[x.name]?`<span class="badge miss">${T('condTag')}</span>`:''}</div></div></div>
+    ${condHtml(x.name)}
+    <div class="foot swrow"><button class="sw ${d?'on':''}" data-toggle="${x.id}" role="switch" aria-checked="${d}" title="${d?T('markMissing'):T('markFound')}"><span class="track"><span class="knob"></span></span><span class="swl">${T('foundLbl')}</span></button></div></div>`; }
 function chainCardHtml(e,steps,why){
   const merges=steps.filter(s=>s.t==='merge'); const d=done.has(e.id);
   const rows=merges.map((s,i)=>{ const fe=byId[byName[s.res].id]; const now=i===0;
@@ -574,7 +617,7 @@ function chainCardHtml(e,steps,why){
       <div class="recipe">${s.r.map(x=>ingHtml(x,ui.sel[x]?'hl':'')).join('<span class="plus">+</span>')}<span class="plus">→</span>${ingHtml(s.res,'rs')}</div>
       ${now?`<button class="btn solid merge" data-merge="${fe.id}">${T('mergeNow')}: ${esc(nm(s.res))}</button>`:''}</div>`; }).join('');
   return `<div class="card chain ${d?'done':''}" data-card="${e.id}"><div class="chainlbl">${T('chainLbl')(merges.length)}</div>
-    <div class="ch"><div class="big" data-open="${esc(e.name)}"><img class="sprite" src="${IMG[e.name]}" alt=""><span class="tick">✓</span></div>
+    <div class="ch"><div class="big" data-open="${esc(e.name)}"><img class="sprite" src="${spr(e.name)}" alt=""><span class="tick">✓</span></div>
       <div class="ct"><div class="kind">${T('goal')}</div><div class="name" data-open="${esc(e.name)}">${esc(nm(e.name))}</div>${alt(e.name)!==nm(e.name)?`<div class="alt">${esc(alt(e.name))}</div>`:''}${e.new?`<span class="star" title="${T('natTitle')}">★ Naturalist</span>`:''}</div></div>
     <div class="area cx">${T('chainExplain')(merges.length)}${why?`<div class="why">${why}</div>`:''}</div>
     ${rows}</div>`;
@@ -592,7 +635,7 @@ function planSteps(target,how){
   }
   return out;
 }
-const mini=n=>`<img class="sprite" src="${IMG[n]}" alt="" title="${esc(nm(n))}" data-open="${esc(n)}">`;
+const mini=n=>`<img class="sprite" src="${spr(n)}" alt="" title="${esc(nm(n))}" data-open="${esc(n)}">`;
 function stepsHtml(steps){
   const inv=new Set(selNames()); const out=[];
   for(const s of steps){ if(s.t==='pick'){ inv.add(s.x); continue; }
@@ -636,7 +679,7 @@ function toast(html,actions){ let el=$('#toast'); if(!el){ el=document.createEle
 function armToast(){ clearTimeout(toastTimer); const el=$('#toast'); if(!el) return; if(touchUI()) return;
   const bar=el.querySelector('.tbar i'); if(bar){ bar.style.animation='none'; void bar.offsetWidth; bar.style.animation=`tcount ${TOAST_MS}ms linear forwards`; }
   toastTimer=setTimeout(()=>{ el.classList.remove('on'); },TOAST_MS); }
-const tsp=(n,cls='')=>`<span class="tsp ${cls}" data-open="${esc(n)}"><img class="sprite" src="${IMG[n]}" alt=""><span>${esc(nm(n))}</span></span>`;
+const tsp=(n,cls='')=>`<span class="tsp ${cls}" data-open="${esc(n)}"><img class="sprite" src="${spr(n)}" alt=""><span>${esc(nm(n))}</span></span>`;
 let undoMsg='';
 function undoTo(idx){ const h=hist[idx]; if(!h) return;
   const before={sel:{...ui.sel},done:new Set(done)};
@@ -658,7 +701,7 @@ function renderStatic(){
   $('#credits').textContent=T('credits');
 }
 function renderProgress(){
-  const rows=TIERS.map(t=>{ const es=DATA.evos.filter(e=>e.tier===t.t); return {label:tierLabel(t.t),d:es.filter(e=>done.has(e.id)).length,n:es.length}; });
+  const rows=TIERS.map(t=>{ const es=ALL.filter(e=>e.tier===t.t); return {label:tierLabel(t.t),d:es.filter(e=>done.has(e.id)).length,n:es.length}; });
   const tot={label:T('total'),d:rows.reduce((a,r)=>a+r.d,0),n:rows.reduce((a,r)=>a+r.n,0)};
   $('#progress').innerHTML=[tot,...rows].map((r,i)=>`<div class="prog"><div class="lbl"><span>${r.label}</span><span><b>${r.d}</b> / ${r.n}</span></div><div class="bar ${i===0?'total':''}"><i style="width:${r.n?100*r.d/r.n:0}%"></i></div></div>`).join('');
   $('#footSum').textContent = tot.n-tot.d===0 ? T('footAll') : T('footMiss')(tot.n-tot.d,tot.n);
@@ -677,16 +720,16 @@ function chip(i,avail){
   return chipHtml(i,sel);
 }
 function chipHtml(i,sel){
-  return `<span class="chipw"><button class="chip ${sel?'sel':''}" data-${sel?'dec':'ing'}="${esc(i)}" title="${esc(nm(i))}${sel?' · '+T('inRunTip'):''}"><img class="sprite" src="${IMG[i]}" alt=""><span class="cl" lang="${ui.lang}">${esc(nm(i))}</span></button><button class="info" data-open="${esc(i)}" title="${T('details')}" aria-label="${T('details')}">ⓘ</button></span>`;
+  return `<span class="chipw"><button class="chip ${sel?'sel':''}" data-${sel?'dec':'ing'}="${esc(i)}" title="${esc(nm(i))}${sel?' · '+T('inRunTip'):''}"><img class="sprite" src="${spr(i)}" alt=""><span class="cl" lang="${ui.lang}">${esc(nm(i))}</span></button><button class="info" data-open="${esc(i)}" title="${T('details')}" aria-label="${T('details')}">ⓘ</button></span>`;
 }
 function renderPicker(){
   const P=plan(ui.sel); const avail=new Set([...selNames(),...buildableSet(P)]);
   $('#chipsB').innerHTML=DATA.base.map(i=>chip(i,avail)).join('');
   $('#chipsE').innerHTML=ui.showE?EVO_ING.map(i=>chip(i,avail)).join(''):'';
   $('#togE').textContent=ui.showE?T('hide'):`${T('show')} (${EVO_ING.length})`;
-  $('#chipsP').innerHTML=ui.showP?BASE_P.map(i=>chip(i,avail)).join(''):'';
-  $('#togP').textContent=ui.showP?T('hide'):`${T('show')} (${BASE_P.length})`;
-  const extra=selNames().filter(n=>!DATA.base.includes(n)&&!EVO_ING.includes(n)&&!BASE_P.includes(n));
+  $('#chipsP').innerHTML=ui.showP?PICK_P.map(i=>chip(i,avail)).join(''):'';
+  $('#togP').textContent=ui.showP?T('hide'):`${T('show')} (${PICK_P.length})`;
+  const extra=selNames().filter(n=>!DATA.base.includes(n)&&!EVO_ING.includes(n)&&!PICK_P.includes(n));
   $('#grpX').hidden=!extra.length; $('#chipsX').innerHTML=extra.map(i=>chip(i,avail)).join('');
   $('#clearSel').hidden=selCount()===0;
   renderHist();
@@ -694,6 +737,8 @@ function renderPicker(){
   if(!selCount()) hint.innerHTML=`<span>${T('hintEmpty')}</span>`;
   else { const made=[...buildableSet(P)].filter(n=>!ui.sel[n]); const open=made.filter(n=>!done.has(byName[n].id)).length;
     hint.innerHTML=`<span>${T('hintSel')(selCount(),made.length,open)}</span>`; }
+  const cnow=Object.keys(COND).filter(n=>!done.has(byEntry[n].id)&&COND[n].trig.some(t=>ui.sel[t]));
+  if(cnow.length) hint.innerHTML+=`<span class="cnow"><b>${T('condNow')}</b>${cnow.map(n=>`<span class="dn" data-open="${esc(n)}">${mini(n)}${esc(nm(n))}</span>`).join('')}</span>`;
 }
 function passFilters(e){
   if(ui.tier!=='all' && String(e.tier)!==String(ui.tier)) return false;
@@ -722,7 +767,7 @@ function pickCard(s,top,P){
   const direct=s.direct.length?`<div class="area direct"><div class="ml ok">${T('direct')}</div><div class="plist">${s.direct.slice(0,4).map(t=>row(t,'d')).join('')}${more(s.direct.length-4)}</div></div>`:'';
   const near=s.near.length?`<div class="area near"><div class="ml warn">${T('near')}</div><div class="plist">${s.near.slice(0,4).map(t=>row(t,'n')).join('')}${more(s.near.length-4)}</div></div>`:'';
   return `<div class="card pick">
-    <div class="ch"><div class="big" data-open="${esc(s.x)}"><img class="sprite" src="${IMG[s.x]}" alt=""></div>
+    <div class="ch"><div class="big" data-open="${esc(s.x)}"><img class="sprite" src="${spr(s.x)}" alt=""></div>
       <div class="ct"><div class="name" data-open="${esc(s.x)}">${esc(nm(s.x))}</div><button class="btn solid takebtn" data-ing="${esc(s.x)}">+ ${T('selectBtn')}</button></div></div>
     ${direct}${near}</div>`;
 }
@@ -731,9 +776,11 @@ function renderMain(){
   if(ui.mode==='lex'){
     const groups=TIERS.filter(t=>ui.tier==='all'||String(t.t)===String(ui.tier));
     let html=''; let total=0;
-    for(const t of groups){ const all=DATA.evos.filter(e=>e.tier===t.t); const es=all.filter(passFilters); total+=es.length; const miss=all.filter(e=>!done.has(e.id)).length;
+    for(const t of groups){ const all=ALL.filter(e=>e.tier===t.t); const es=all.filter(passFilters);
+      // balls and passives in alphabetical order of the shown name, like the in-game encyclopedia
+      if(t.t==='b'||t.t==='bp') es.sort((x,y)=>nm(x.name).localeCompare(nm(y.name),ui.lang)); total+=es.length; const miss=all.filter(e=>!done.has(e.id)).length;
       html+=`<div class="tierhead"><h2>${tierLabel(t.t)}</h2><span class="n">${miss===0?T('complete'):T('missOf')(miss,all.length)} · ${esc(T('tierSub')[t.t])}</span><span class="ln"></span></div>`;
-      html+=es.length?`<div class="grid">${es.map(e=>cardHtml(e)).join('')}</div>`:`<div class="empty">${ui.filter==='missing'&&!ui.q&&ui.newF==='all'?T('allFound'):T('nothing')}</div>`; }
+      html+=es.length?`<div class="grid">${es.map(e=>e.kind?entryCardHtml(e):cardHtml(e)).join('')}</div>`:`<div class="empty">${ui.filter==='missing'&&!ui.q&&ui.newF==='all'?T('allFound'):T('nothing')}</div>`; }
     main.innerHTML=`<div class="status"><span>${T('shown')(total)}</span><span>${T('legendCards')}</span></div>`+html;
     return;
   }
@@ -751,13 +798,15 @@ function renderMain(){
   // closer targets first (a target one pick away after this one outweighs one that still needs three); on a tie, the one building on the run
   Object.values(score).forEach(s=>s.near.sort((a,b)=>a.w.total-b.w.total||inRun(b.w)-inRun(a.w)||tierOrder(a.e)-tierOrder(b.e)));
   // picks that build on the current run come before picks that only open fresh routes
-  const picks=Object.values(score).filter(s=>!sel.has(s.x)).sort((a,b)=>b.direct.length-a.direct.length||b.chainSum-a.chainSum||b.runSum-a.runSum||b.nearSum-a.nearSum||b.near.length-a.near.length||nm(a.x).localeCompare(nm(b.x)));
+  const tgt=s=>(s.direct[0]||s.near[0]).e.name;
+  const picks=Object.values(score).filter(s=>!sel.has(s.x)).sort((a,b)=>b.direct.length-a.direct.length||b.chainSum-a.chainSum||b.runSum-a.runSum||b.nearSum-a.nearSum||b.near.length-a.near.length||nm(tgt(a)).localeCompare(nm(tgt(b)))||nm(a.x).localeCompare(nm(b.x)));
   const pb=picks.filter(s=>!isPassive(s.x)), pp=picks.filter(s=>isPassive(s.x));
   const lim=nSel?9:6;
+  const pickGrid=(list,key)=>`<div class="picks">${list.slice(0,ui[key]?list.length:lim).map(s=>pickCard(s,false,P)).join('')}</div>${list.length>lim?`<button class="btn morebtn" data-tog="${key}">${ui[key]?T('showLess'):T('showAll')(list.length)}</button>`:''}`;
   const pickHtml=picks.length?`<section class="res"><h2>${T('picks')} <span class="n">${T('picksTag')}</span><small>${nSel?T('picksHelpSel'):T('picksHelpEmpty')}</small></h2>
     <div class="pickhelp"><span class="d"><b>${T('legendDirect')}:</b> ${T('legendDirectHelp')}</span><span class="nr"><b>${T('legendNear')}:</b> ${T('legendNearHelp')}</span></div>
-    ${pb.length?`<h3 class="sub2">${T('pickBalls')} <button class="tg" data-tog="showPB">${ui.showPB?T('hide'):`${T('show')} (${pb.length})`}</button><span class="ln"></span></h3>${ui.showPB?`<div class="picks">${pb.slice(0,lim).map((s,i)=>pickCard(s,false,P)).join('')}</div>`:''}`:''}
-    ${pp.length?`<h3 class="sub2">${T('pickPassives')} <button class="tg" data-tog="showPP">${ui.showPP?T('hide'):`${T('show')} (${pp.length})`}</button><span class="ln"></span></h3>${ui.showPP?`<div class="picks">${pp.slice(0,lim).map((s,i)=>pickCard(s,false,P)).join('')}</div>`:''}`:''}</section>`:'';
+    ${pb.length?`<h3 class="sub2">${T('pickBalls')} <button class="tg" data-tog="showPB">${ui.showPB?T('hide'):`${T('show')} (${pb.length})`}</button><span class="ln"></span></h3>${ui.showPB?pickGrid(pb,'allPB'):''}`:''}
+    ${pp.length?`<h3 class="sub2">${T('pickPassives')} <button class="tg" data-tog="showPP">${ui.showPP?T('hide'):`${T('show')} (${pp.length})`}</button><span class="ln"></span></h3>${ui.showPP?pickGrid(pp,'allPP'):''}`:''}</section>`:'';
   // one-step merges: every ingredient of a recipe is in hand right now
   const direct=e=>e.recipes.find(r=>r.every(i=>sel.has(i)));
   const can=DATA.evos.filter(e=>P[e.name].total===0&&!sel.has(e.name));
@@ -795,7 +844,7 @@ function renderAll(){ renderStatic(); renderProgress(); renderTools(); renderPic
 
 function openDetail(n){
   const e=byName[n]; const m=$('#modal'); const d=$('#dlg');
-  let html=`<button class="x" data-close aria-label="${T('close')}">×</button><div class="hero"><img class="sprite" src="${IMG[n]}" alt=""><div class="t">`;
+  let html=`<button class="x" data-close aria-label="${T('close')}">×</button><div class="hero"><img class="sprite" src="${spr(n)}" alt=""><div class="t">`;
   if(e){ const dn=done.has(e.id);
     html+=`<span class="kind">${tierLabel(e.tier)} · ${T('evolution')}</span><h3>${esc(nm(n))}${e.new?`<span class="star" title="${T('natTitle')}">★ Naturalist</span>`:''}</h3>${alt(n)!==nm(n)?`<div class="en">${esc(alt(n))}</div>`:''}
       <div class="badges"><span class="badge ${dn?'ok':'miss'}">${dn?'✓ '+T('found'):T('missingForYou')}</span>${ui.sel[n]?`<span class="badge run">✓ ${T('stInRun')}</span>`:''}</div>
@@ -803,12 +852,13 @@ function openDetail(n){
     html+=`<h4>${T('recipe')}</h4><div class="recs">${e.recipes.map((r,ri)=>recipeHtml(r,ri)).join('')}</div>`;
     const st=subTree(e,null,0); if(st) html+=`<h4>${T('craftIng')}</h4>${st}`;
   } else {
-    html+=`<span class="kind">${BASE_P.includes(n)?T('basePassive'):T('baseBall')}</span><h3>${esc(nm(n))}</h3>${alt(n)!==nm(n)?`<div class="en">${esc(alt(n))}</div>`:''}
-      <div class="badges">${ui.sel[n]?`<span class="badge run">✓ ${T('stInRun')}</span>`:`<span class="badge">${T('stNotInRun')}</span>`}</div>
-      <div class="acts"><button class="btn ${ui.sel[n]?'':'primary'}" data-${ui.sel[n]?'dec':'ing'}="${esc(n)}" data-keep="1">${ui.sel[n]?T('outRun'):T('addRun')}</button></div></div></div>`;
+    const x=byEntry[n], dn=x&&done.has(x.id), pick=DATA.base.includes(n)||PICK_P.includes(n);
+    html+=`<span class="kind">${x&&x.kind==='passive'?T('basePassive'):T('baseBall')}</span><h3>${esc(nm(n))}${x&&x.new?`<span class="star" title="${T('natTitle')}">★ Naturalist</span>`:''}</h3>${alt(n)!==nm(n)?`<div class="en">${esc(alt(n))}</div>`:''}
+      <div class="badges">${x?`<span class="badge ${dn?'ok':'miss'}">${dn?'✓ '+T('found'):T('missingForYou')}</span>`:''}${pick?(ui.sel[n]?`<span class="badge run">✓ ${T('stInRun')}</span>`:`<span class="badge">${T('stNotInRun')}</span>`):''}</div>
+      <div class="acts">${x?`<button class="btn ${dn?'':'primary'}" data-toggle="${x.id}" data-keep="1">${dn?T('markMissing'):T('markFound')}</button>`:''}${pick?`<button class="btn" data-${ui.sel[n]?'dec':'ing'}="${esc(n)}" data-keep="1">${ui.sel[n]?T('outRun'):T('addRun')}</button>`:''}</div></div></div>${condHtml(n)?`<div class="dcond">${condHtml(n)}</div>`:''}`;
   }
   const uses=(usedIn[n]||[]).slice().sort((a,b)=>(done.has(a.e.id)-done.has(b.e.id)));
-  if(uses.length){ html+=`<h4>${T('usedFor')}</h4><div class="uses">${uses.map(u=>{ const others=u.r.filter(x=>x!==n); return `<span class="use ${done.has(u.e.id)?'done':''}" data-open="${esc(u.e.name)}"><img class="sprite" src="${IMG[u.e.name]}" alt=""><span><b>${esc(nm(u.e.name))}</b> <span class="w">${T('with')} ${others.map(nm).map(esc).join(' + ')}${done.has(u.e.id)?' · ✓':''}</span></span></span>`; }).join('')}</div>`; }
+  if(uses.length){ html+=`<h4>${T('usedFor')}</h4><div class="uses">${uses.map(u=>{ const others=u.r.filter(x=>x!==n); return `<span class="use ${done.has(u.e.id)?'done':''}" data-open="${esc(u.e.name)}"><img class="sprite" src="${spr(u.e.name)}" alt=""><span><b>${esc(nm(u.e.name))}</b> <span class="w">${T('with')} ${others.map(nm).map(esc).join(' + ')}${done.has(u.e.id)?' · ✓':''}</span></span></span>`; }).join('')}</div>`; }
   d.innerHTML=html; m.classList.add('on'); d.dataset.name=n; d.querySelector('.x').focus();
 }
 function closeDetail(){ $('#modal').classList.remove('on'); }
@@ -838,7 +888,7 @@ document.addEventListener('click',ev=>{
     else { const P2=plan(ui.sel); const now=DATA.evos.filter(x=>P2[x.name].total===0&&!ui.sel[x.name]&&x.recipes.some(r=>r.includes(i))&&!done.has(x.id));
       if(now.length) toast(`<div class="thead">${tsp(i,'in')}<span class="tl">${T('tInRun')}</span><span class="tarr">→</span>${now.slice(0,3).map(x=>tsp(x.name,'new')).join('')}<span class="tl ok">${T('tNowBuildable')}</span></div>`, now.length?[{label:T('tShow'),act:'scrollRes'}]:[]); } return; }
   if(t.id==='modal'||t.dataset.close!==undefined){ if(t.id==='modal'&&ev.target!==t) return; closeDetail(); return; }
-  if(t.dataset.t){ ui.tier=t.dataset.t==='all'?'all':(t.dataset.t==='p'?'p':Number(t.dataset.t)); saveUi(); renderTools(); renderMain(); return; }
+  if(t.dataset.t){ const v=t.dataset.t; ui.tier=['all','p','b','bp'].includes(v)?v:Number(v); saveUi(); renderTools(); renderMain(); return; }
   if(t.dataset.f){ ui.filter=t.dataset.f; saveUi(); renderTools(); renderMain(); return; }
   if(t.dataset.l){ ui.lang=t.dataset.l; saveUi(); renderAll(); return; }
   if(t.dataset.m){ ui.mode=t.dataset.m; saveUi(); renderTools(); renderMain(); window.scrollTo({top:0}); return; }
@@ -850,7 +900,7 @@ document.addEventListener('click',ev=>{
     const ok=()=>{$('#ioMsg').textContent=T('copied')}; const fb=()=>{ta.focus();ta.select();$('#ioMsg').textContent=T('selected')};
     if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(ok,fb); else fb(); return; }
   if(t.id==='loadBtn'){ try{ const raw=JSON.parse($('#ioIn').value); const arr=Array.isArray(raw)?raw:raw.done; if(!Array.isArray(arr)) throw 0; const valid=arr.filter(id=>byId[id]);
-      const nsel={}; if(!Array.isArray(raw)&&raw.sel&&typeof raw.sel==='object') Object.keys(raw.sel).forEach(n=>{ if(IMG[n]) nsel[n]=1; });
+      const nsel={}; if(!Array.isArray(raw)&&raw.sel&&typeof raw.sel==='object') Object.keys(raw.sel).forEach(n=>{ if(IMG[n]||byEntry[n]) nsel[n]=1; });
       act(T('hLoad'),()=>{ done=new Set(valid); if(!Array.isArray(raw)) ui.sel=nsel; }); if(!Array.isArray(raw)&&Array.isArray(raw.hist)) { hist=raw.hist.slice(-40); saveHist(); }
       renderAll(); $('#ioIn').value=''; $('#ioMsg2').textContent=T('loaded')(valid.length)+(Object.keys(nsel).length?` · ${T('loadedRun')(Object.keys(nsel).length)}`:''); }
     catch(e){ $('#ioMsg2').textContent=T('badCode'); } return; }
