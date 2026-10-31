@@ -264,21 +264,22 @@ html,body{overflow-anchor:none}
 .pc .pcn{font-size:12px;line-height:1.15;color:var(--fg2);min-width:0;overflow-wrap:anywhere}
 .pc.d img{width:34px;height:34px}
 .pc.d .pcn{color:var(--fg);font-weight:600;font-size:13px}
-.pc.more{color:var(--fg3);font-size:12px;padding:2px 3px}
-.pr{display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:8px;align-items:center;cursor:pointer;border-radius:6px;padding:3px}
+.pc.more{color:var(--fg3);font-size:13px;padding:4px 10px}
+.plist{gap:6px}
+.pr{display:grid;grid-template-columns:48px minmax(0,1fr);column-gap:12px;row-gap:8px;align-items:center;cursor:pointer;border-radius:8px;padding:10px}
 .pr:hover{background:var(--bg3)}
-.pr>img{width:34px;height:34px;border-radius:6px;grid-row:span 2}
-.pr .prn{font-size:13px;line-height:1.2;color:var(--fg);font-weight:500;min-width:0;overflow-wrap:anywhere}
-.pr .prp{display:flex;flex-wrap:wrap;align-items:center;gap:3px 5px;font-size:11px;color:var(--fg3);min-height:0}
-.pr .prp:empty{display:none}
-.pr .prl+.si{margin-left:-1px}
+.pr>img{width:48px;height:48px;border-radius:6px;grid-row:span 2;align-self:start}
+.pr .prn{font-size:15px;line-height:1.25;color:var(--fg);font-weight:600;min-width:0;overflow-wrap:anywhere}
+.pr .prp{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 10px;align-items:center}
+.pr .prl{font-size:12px;color:var(--fg3)}
+.pr .prl.have{color:var(--accent);font-weight:600}
+.pr .prs{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .pr .si{display:inline-flex;padding:2px}
-.pr .si img{width:20px;height:20px;border-radius:3px}
+.pr .si img{width:30px;height:30px;border-radius:4px}
 .pr .si.have img{outline:2px solid var(--accent);outline-offset:1px}
 .pr .si.need img{outline:2px solid var(--danger);outline-offset:1px;opacity:.7}
-.pr.run{background:color-mix(in srgb,var(--accent) 12%,transparent);box-shadow:inset 3px 0 0 var(--accent)}
-.pr.run:hover{background:color-mix(in srgb,var(--accent) 20%,transparent)}
-.pr .prl.h{color:var(--accent);font-weight:600}
+.pr.run{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.pr.run:hover{background:color-mix(in srgb,var(--accent) 18%,transparent)}
 .pickhelp{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--fg2);margin:0 0 10px}
 .pickhelp span b{font-weight:600}
 .pickhelp .d b{color:var(--ok)} .pickhelp .nr b{color:var(--warn)}
@@ -694,9 +695,15 @@ function pickCard(s,top,P){
     // what is left after this pick, per equally short way; different leftovers are alternatives ("Ghost or Dark")
     const needs=[]; for(const v of ws){ const n=[]; for(const k in v.missing) for(let j=v.missing[k]-(k===s.x?1:0);j>0;j--) n.push(k);
       if(n.length&&!needs.some(o=>o.join()===n.join())) needs.push(n); }
+    // parts shared by all alternatives first, in the same order, so only the differing tail changes between lines
+    if(needs.length>1){ const common=[]; const rest=needs.map(n=>[...n]);
+      for(const k of needs[0]) if(rest.every(r=>r.includes(k))){ common.push(k); rest.forEach(r=>r.splice(r.indexOf(k),1)); }
+      rest.forEach((r,i)=>needs[i]=[...common,...r]); }
     const sp=(k,c)=>`<span class="si ${c}">${mini(k)}</span>`;
-    const needHtml=n=>n.slice(0,3).map(k=>sp(k,'need')).join('')+(n.length>3?`<span class="prl">+${n.length-3}</span>`:'');
-    return `<div class="pr ${cls} ${have.length?'run':''}" data-open="${esc(e.name)}">${mini(e.name)}<span class="prn">${esc(nm(e.name))}</span><span class="prp">${have.length?`<span class="prl h">${T('pWith')}</span>${have.map(k=>sp(k,'have')).join('')}`:''}${needs.length?`<span class="prl">${T('pStill')}</span>${needs.slice(0,3).map(needHtml).join(`<span class="prl">${T('pOr')}</span>`)}`:''}</span></div>`; };
+    // label column + sprite column, one line per alternative, so "or" ways line up under each other
+    const line=(lbl,cls,items)=>`<span class="prl ${cls}">${lbl}</span><span class="prs">${items.slice(0,4).map(k=>sp(k,cls)).join('')}${items.length>4?`<span class="prl">+${items.length-4}</span>`:''}</span>`;
+    const lines=(have.length?line(T('pWith'),'have',have):'')+needs.slice(0,3).map((n,i)=>line(i?T('pOr'):T('pStill'),'need',n)).join('');
+    return `<div class="pr ${cls} ${have.length?'run':''}" data-open="${esc(e.name)}">${mini(e.name)}<span class="prn">${esc(nm(e.name))}</span>${lines?`<span class="prp">${lines}</span>`:''}</div>`; };
   const more=n=>n>0?`<span class="pc more">${T('pMore')(n)}</span>`:'';
   const direct=s.direct.length?`<div class="area direct"><div class="ml ok">${T('direct')}</div><div class="plist">${s.direct.slice(0,4).map(t=>row(t,'d')).join('')}${more(s.direct.length-4)}</div></div>`:'';
   const near=s.near.length?`<div class="area near"><div class="ml warn">${T('near')}</div><div class="plist">${s.near.slice(0,4).map(t=>row(t,'n')).join('')}${more(s.near.length-4)}</div></div>`:'';
