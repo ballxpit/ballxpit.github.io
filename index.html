@@ -779,8 +779,8 @@ function renderMain(){
     const groups=TIERS.filter(t=>ui.tier==='all'||String(t.t)===String(ui.tier));
     let html=''; let total=0;
     for(const t of groups){ const all=ALL.filter(e=>e.tier===t.t); const es=all.filter(passFilters);
-      // balls and passives in alphabetical order of the shown name, like the in-game encyclopedia
-      if(t.t==='b'||t.t==='bp') es.sort((x,y)=>nm(x.name).localeCompare(nm(y.name),ui.lang)); total+=es.length; const miss=all.filter(e=>!done.has(e.id)).length;
+      // same order as the in-game encyclopedia: alphabetical by English name, whatever the UI language
+      es.sort((x,y)=>x.name.localeCompare(y.name,'en')); total+=es.length; const miss=all.filter(e=>!done.has(e.id)).length;
       html+=`<div class="tierhead"><h2>${tierLabel(t.t)}</h2><span class="n">${miss===0?T('complete'):T('missOf')(miss,all.length)} · ${esc(T('tierSub')[t.t])}</span><span class="ln"></span></div>`;
       html+=es.length?`<div class="grid">${es.map(e=>e.kind?entryCardHtml(e):cardHtml(e)).join('')}</div>`:`<div class="empty">${ui.filter==='missing'&&!ui.q&&ui.newF==='all'?T('allFound'):T('nothing')}</div>`; }
     main.innerHTML=`<div class="status"><span>${T('shown')(total)}</span><span>${T('legendCards')}</span></div>`+html;
