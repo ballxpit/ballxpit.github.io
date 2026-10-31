@@ -291,6 +291,10 @@ html,body{overflow-anchor:none}
 .pc.d img{width:34px;height:34px}
 .pc.d .pcn{color:var(--fg);font-weight:600;font-size:13px}
 .morebtn{margin-top:10px}
+.lmgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 10px}
+.lmchips{display:flex;flex-wrap:wrap;gap:8px 16px}
+.lmchips .dn{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--fg);font-size:13px}
+.lmchips img{width:28px;height:28px;border-radius:4px}
 .pc.more{color:var(--fg3);font-size:13px;padding:4px 10px}
 .plist{gap:6px}
 .pr{display:grid;grid-template-columns:48px minmax(0,1fr);column-gap:12px;row-gap:8px;align-items:center;cursor:pointer;border-radius:8px;padding:10px}
@@ -462,7 +466,7 @@ const I18N={
   evolution:'Evolution',baseBall:'Basisball',basePassive:'Passiv',recipe:'Rezept',craftIng:'Zutaten herstellen',usedFor:'Wird gebraucht für',with:'mit',close:'Schließen',
   ioBtn:'Fortschritt sichern / übertragen',reset:'Alles zurücksetzen',resetArm:'Wirklich? Nochmal tippen zum Löschen',ioHelp:'Alles wird automatisch im Browser gespeichert (Fortschritt, Durchlauf, Verlauf). Dieser Code enthält das Gleiche zum Übertragen auf ein anderes Gerät oder in eine neue Version der Datei: kopieren und dort einfügen.',loadedRun:n=>`Durchlauf mit ${n} Teilen geladen`,
   copy:'Code kopieren',load:'Code laden',copied:'Kopiert.',selected:'Markiert. Jetzt mit Strg+C / Cmd+C kopieren.',loaded:n=>`${n} Einträge geladen.`,badCode:'Code nicht lesbar. Bitte den kompletten Code einfügen.',
-  footAll:'Alles entdeckt. Glückwunsch!',footMiss:(m,n)=>`Dir fehlen noch ${m} von ${n} Lexikon-Einträgen.`,balls:'Bälle',pEvos:'Passiv-Evolutionen',seenAsk:'Noch nicht im Lexikon als gefunden:',seenYes:'Als gefunden markieren',seenDone:'im Lexikon als gefunden markiert:',showAll:n=>`Alle ${n} anzeigen`,showLess:'Weniger anzeigen',condTag:'Bedingung',condHead:'Erscheint nur unter Bedingung',condNow:'Kann jetzt im Level-up auftauchen (fehlt dir noch):',
+  footAll:'Alles entdeckt. Glückwunsch!',footMiss:(m,n)=>`Dir fehlen noch ${m} von ${n} Lexikon-Einträgen.`,balls:'Bälle',pEvos:'Passiv-Evolutionen',lexMiss:'Fehlt noch im Lexikon',lexMissHelp:'Basisbälle und Passive, die noch nicht als gefunden markiert sind. Sie zählen für Scholar, sobald du sie einmal im Run aufnimmst. Passive kann man nicht bauen, nur nehmen, wenn sie im Level-up angeboten werden.',lmNow:'Jetzt möglich: Bedingung erfüllt',lmCond:'Freischaltbar: braucht erst',lmPlain:'Einfach nehmen, wenn angeboten',metBy:'erfüllt durch',needs:'braucht',unlocks:'Schaltet frei (Lexikon)',unlockNote:'kann danach im Level-up auftauchen',seenAsk:'Noch nicht im Lexikon als gefunden:',seenYes:'Als gefunden markieren',seenDone:'im Lexikon als gefunden markiert:',showAll:n=>`Alle ${n} anzeigen`,showLess:'Weniger anzeigen',condTag:'Bedingung',condHead:'Erscheint nur unter Bedingung',condNow:'Kann jetzt im Level-up auftauchen (fehlt dir noch):',
 otherInRun:'Weitere Evolutionen im Durchlauf (keine Zutat, belegen aber einen Slot)',hiddenByFilter:n=>`${n} durch Filter ausgeblendet`,
   undo:'Rückgängig',tInRun:'im Durchlauf',tNowBuildable:'jetzt baubar',tShow:'Anzeigen',tMerged:'gemergt',tNext:'Nächster Schritt damit:',tNoNext:'Damit fehlt dir nichts mehr. Slot frei.',tNotIng:'keine Zutat → „Weitere Evolutionen“',tShowRun:'Zum Durchlauf',uDone:'Zurückgenommen:',uBackIn:'wieder im Durchlauf:',uOut:'aus dem Durchlauf:',uUnfound:'wieder als fehlend:',uFound:'wieder als gefunden:',undoHere:'bis hierhin zurück',history:'Verlauf',hAdd:n=>`${n} in den Durchlauf`,hRemove:n=>`${n} aus dem Durchlauf`,hMerge:n=>`${n} gemergt`,hMark:n=>`${n} als gefunden markiert`,hUnmark:n=>`${n} als fehlend markiert`,hClear:'Auswahl geleert',hLoad:'Fortschritt geladen',hReset:'Alles zurückgesetzt',
   miTitle:'Was beim Mergen passiert',miBody:'Die Zutaten verlassen deinen Durchlauf, das Ergebnis kommt hinein und wird automatisch als <b>gefunden</b> markiert. Ist das Ergebnis selbst keine Zutat, taucht es unter „Weitere Evolutionen im Durchlauf“ auf. Jeder Schritt lässt sich über „Rückgängig“ zurücknehmen. Dieser Hinweis erscheint nur einmal.',miOk:'Verstanden, mergen',miCancel:'Abbrechen',
@@ -487,7 +491,7 @@ otherInRun:'Weitere Evolutionen im Durchlauf (keine Zutat, belegen aber einen Sl
   evolution:'Evolution',baseBall:'Base ball',basePassive:'Base passive',recipe:'Recipe',craftIng:'Crafting the ingredients',usedFor:'Used for',with:'with',close:'Close',
   ioBtn:'Save / transfer progress',reset:'Reset everything',resetArm:'Really? Tap again to delete',ioHelp:'Everything is saved automatically in your browser (progress, run, history). This code contains the same for transferring to another device or a new version of the file: copy it and paste it there.',loadedRun:n=>`run with ${n} parts loaded`,
   copy:'Copy code',load:'Load code',copied:'Copied.',selected:'Selected. Now copy with Ctrl+C / Cmd+C.',loaded:n=>`${n} entries loaded.`,badCode:'Code not readable. Please paste the complete code.',
-  footAll:'Everything discovered. Congratulations!',footMiss:(m,n)=>`You are still missing ${m} of ${n} encyclopedia entries.`,balls:'Balls',pEvos:'Passive evolutions',seenAsk:'Not marked as found yet:',seenYes:'Mark as found',seenDone:'marked as found:',showAll:n=>`Show all ${n}`,showLess:'Show fewer',condTag:'Condition',condHead:'Only appears under a condition',condNow:'Can show up on level-up now (still missing):',
+  footAll:'Everything discovered. Congratulations!',footMiss:(m,n)=>`You are still missing ${m} of ${n} encyclopedia entries.`,balls:'Balls',pEvos:'Passive evolutions',lexMiss:'Still missing in the encyclopedia',lexMissHelp:'Base balls and passives not marked as found yet. They count for Scholar once you pick them up in a run. Passives cannot be built, only taken when a level-up offers them.',lmNow:'Possible now: condition met',lmCond:'Unlockable: needs first',lmPlain:'Just take them when offered',metBy:'met by',needs:'needs',unlocks:'Unlocks (encyclopedia)',unlockNote:'can then show up on level-up',seenAsk:'Not marked as found yet:',seenYes:'Mark as found',seenDone:'marked as found:',showAll:n=>`Show all ${n}`,showLess:'Show fewer',condTag:'Condition',condHead:'Only appears under a condition',condNow:'Can show up on level-up now (still missing):',
 otherInRun:'Other evolutions in the run (not an ingredient, but they take a slot)',hiddenByFilter:n=>`${n} hidden by filter`,
   undo:'Undo',tInRun:'in run',tNowBuildable:'buildable now',tShow:'Show',tMerged:'merged',tNext:'Next step with it:',tNoNext:'Nothing missing uses it. Slot free.',tNotIng:'not an ingredient → “Other evolutions”',tShowRun:'To run',uDone:'Undone:',uBackIn:'back in run:',uOut:'out of run:',uUnfound:'missing again:',uFound:'found again:',undoHere:'back to here',history:'History',hAdd:n=>`${n} added to run`,hRemove:n=>`${n} removed from run`,hMerge:n=>`${n} merged`,hMark:n=>`${n} marked found`,hUnmark:n=>`${n} marked missing`,hClear:'Selection cleared',hLoad:'Progress loaded',hReset:'Everything reset',
   miTitle:'What happens when you merge',miBody:'The parts leave your run, the result joins it and is automatically marked as <b>found</b>. If the result is not an ingredient itself, it shows up under “Other evolutions in the run”. Every step can be undone with “Undo”. This note appears only once.',miOk:'Got it, merge',miCancel:'Cancel',
@@ -501,13 +505,13 @@ let done=new Set();
 try{ const s=localStorage.getItem(KEY); if(s) done=new Set(JSON.parse(s)); }catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify([...done])); }catch(e){} }
 const ui={ tier:'all', filter:'all', newF:'all', q:'', sel:{}, lang:'de', showP:true, showE:true, showPB:true, showPP:true, showH:false, showOld:false, mode:'run' };
-try{ const s=JSON.parse(localStorage.getItem(KEY+'-ui')||'{}'); for(const k of ['hidePE','newF','filter','lang','tier','showP','showE','showPB','showPP','showOld','mode']) if(s[k]!==undefined) ui[k]=s[k];
+try{ const s=JSON.parse(localStorage.getItem(KEY+'-ui')||'{}'); for(const k of ['hideLexPlain','hidePE','newF','filter','lang','tier','showP','showE','showPB','showPP','showOld','mode']) if(s[k]!==undefined) ui[k]=s[k];
   if(Array.isArray(s.sel)) s.sel.forEach(n=>ui.sel[n]=1); else if(s.sel&&typeof s.sel==='object') ui.sel=s.sel; }catch(e){}
 if(ui.tier==='p') ui.tier='bp';
 const selCount=()=>Object.values(ui.sel).reduce((a,b)=>a+b,0);
 const selNames=()=>Object.keys(ui.sel);
 function addSel(n,delta){ if(delta>0) ui.sel[n]=1; else delete ui.sel[n]; }
-function saveUi(){ try{localStorage.setItem(KEY+'-ui',JSON.stringify({hidePE:ui.hidePE,newF:ui.newF,filter:ui.filter,lang:ui.lang,tier:ui.tier,showP:ui.showP,showE:ui.showE,showPB:ui.showPB,showPP:ui.showPP,showOld:ui.showOld,mode:ui.mode,sel:ui.sel}))}catch(e){} }
+function saveUi(){ try{localStorage.setItem(KEY+'-ui',JSON.stringify({hideLexPlain:ui.hideLexPlain,hidePE:ui.hidePE,newF:ui.newF,filter:ui.filter,lang:ui.lang,tier:ui.tier,showP:ui.showP,showE:ui.showE,showPB:ui.showPB,showPP:ui.showPP,showOld:ui.showOld,mode:ui.mode,sel:ui.sel}))}catch(e){} }
 const T=k=>I18N[ui.lang][k];
 const tierLabel=t=>t==='p'?T('pEvos'):t==='bp'?T('passives'):t==='b'?T('balls'):`${T('tier')} ${t}`;
 
@@ -786,7 +790,7 @@ function pickCard(s,top,P){
   return `<div class="card pick">
     <div class="ch"><div class="big" data-open="${esc(s.x)}"><img class="sprite" src="${spr(s.x)}" alt=""></div>
       <div class="ct"><div class="name" data-open="${esc(s.x)}">${esc(nm(s.x))}</div><button class="btn solid takebtn" data-ing="${esc(s.x)}">+ ${T('selectBtn')}</button></div></div>
-    ${direct}${near}</div>`;
+    ${direct}${near}${s.unlock.length?`<div class="area"><div class="ml ok">${T('unlocks')}</div><div class="plist">${s.unlock.map(x=>`<div class="pr" data-open="${esc(x.name)}">${mini(x.name)}<span class="prn">${esc(nm(x.name))}</span><span class="prp"><span class="prl">${T('unlockNote')}</span></span></div>`).join('')}</div></div>`:''}</div>`;
 }
 function renderMain(){
   const main=$('#main');
@@ -817,14 +821,20 @@ function renderMain(){
   // targets are {e, w}: the evolution and the way to build it that uses this pick
   for(const e of DATA.evos){ if(done.has(e.id)||!want(e)) continue; const b=P[e.name]; if(!b||b.total===0) continue; const seen=new Set();
     for(const w of b.alts) for(const x in w.missing){ if(seen.has(x)) continue; seen.add(x);
-      const s=(score[x]=score[x]||{x,direct:[],near:[],chain:{},chainSum:0,nearSum:0,runSum:0}); const t={e,w,ws:b.alts.filter(v=>v.missing[x])};
+      const s=(score[x]=score[x]||{x,direct:[],near:[],unlock:[],chain:{},chainSum:0,nearSum:0,runSum:0}); const t={e,w,ws:b.alts.filter(v=>v.missing[x])};
       if(w.total===1){ s.direct.push(t); const c=chainOf(e); if(c){ s.chain[e.name]=c; s.chainSum+=c; } } else { s.near.push(t); s.nearSum+=1/(w.total-1); if(inRun(w)) s.runSum+=1/(w.total-1); } } }
   // closer targets first (a target one pick away after this one outweighs one that still needs three); on a tie, the one building on the run
   Object.values(score).forEach(s=>s.near.sort((a,b)=>a.w.total-b.w.total||inRun(b.w)-inRun(a.w)||tierOrder(a.e)-tierOrder(b.e)));
-  // picks that build on the current run come before picks that only open fresh routes
-  const tgt=s=>(s.direct[0]||s.near[0]).e.name;
-  const picks=Object.values(score).filter(s=>!sel.has(s.x)).sort((a,b)=>b.direct.length-a.direct.length||b.chainSum-a.chainSum||b.runSum-a.runSum||b.nearSum-a.nearSum||b.near.length-a.near.length||nm(tgt(a)).localeCompare(nm(tgt(b)))||nm(a.x).localeCompare(nm(b.x)));
-  const pb=picks.filter(s=>!isPassive(s.x)), pp=picks.filter(s=>isPassive(s.x));
+  // missing encyclopedia entries (base balls, base passives); conditional passives split by whether the run already allows them
+  const lexMiss=ENTRIES.filter(x=>want(x)&&!done.has(x.id));
+  const met=x=>COND[x.name].trig.some(t=>sel.has(t));
+  const condNow=lexMiss.filter(x=>COND[x.name]&&met(x)), condLater=lexMiss.filter(x=>COND[x.name]&&!met(x)), plain=lexMiss.filter(x=>!COND[x.name]);
+  condLater.forEach(x=>COND[x.name].trig.forEach(t=>{ (score[t]=score[t]||{x:t,direct:[],near:[],unlock:[],chain:{},chainSum:0,nearSum:0,runSum:0}).unlock.push(x); }));
+  // picks that build on the current run come before picks that only open fresh routes; unlocking a missing passive comes after evolution progress
+  const tgt=s=>(s.direct[0]||s.near[0]||{e:s.unlock[0]}).e.name;
+  const picks=Object.values(score).filter(s=>!sel.has(s.x)).sort((a,b)=>b.direct.length-a.direct.length||b.chainSum-a.chainSum||b.runSum-a.runSum||b.nearSum-a.nearSum||b.near.length-a.near.length||b.unlock.length-a.unlock.length||nm(tgt(a)).localeCompare(nm(tgt(b)))||nm(a.x).localeCompare(nm(b.x)));
+  const isP=n=>isPassive(n)||!!(byEntry[n]&&byEntry[n].kind==='passive');
+  const pb=picks.filter(s=>!isP(s.x)), pp=picks.filter(s=>isP(s.x));
   const lim=nSel?9:6;
   const pickGrid=(list,key)=>`<div class="picks">${list.slice(0,ui[key]?list.length:lim).map(s=>pickCard(s,false,P)).join('')}</div>${list.length>lim?`<button class="btn morebtn" data-tog="${key}">${ui[key]?T('showLess'):T('showAll')(list.length)}</button>`:''}`;
   const pickHtml=picks.length?`<section class="res"><h2>${T('picks')} <span class="n">${T('picksTag')}</span><small>${nSel?T('picksHelpSel'):T('picksHelpEmpty')}</small></h2>
@@ -860,9 +870,15 @@ function renderMain(){
       ${canNew.length?`<div class="grid">${canNew.filter(e=>!absorbed.has(e.name)).map(card).join('')}</div>`:`<div class="empty">${T('canNowEmpty')}</div>`}
       <h3 class="sub2">${T('grpOld')} <span class="cnt">${canOld.length}</span> <button class="tg" data-tog="showOld">${ui.showOld?T('hide'):T('show')}</button><span class="ln"></span></h3>
       ${ui.showOld?(canOld.length?`<div class="grid">${canOld.map(card).join('')}</div>`:`<div class="empty">${T('none')}</div>`):''}</section>`:'';
+  const lmRow=(x,now)=>{ const tr=COND[x.name].trig.filter(t=>!now||sel.has(t));
+    return `<div class="pr ${now?'run':''}" data-open="${esc(x.name)}">${mini(x.name)}<span class="prn">${esc(nm(x.name))}</span><span class="prp"><span class="prl ${now?'have':''}">${now?T('metBy'):T('needs')}</span><span class="prs">${tr.map(t=>`<span class="si ${now?'have':'need'}">${mini(t)}</span>`).join('')}</span></span></div>`; };
+  const lexHtml=lexMiss.length?`<section class="res"><h2>${T('lexMiss')} <span class="n">${lexMiss.length}</span><small>${T('lexMissHelp')}</small></h2>
+    ${condNow.length?`<h3 class="sub2 g">${T('lmNow')} <span class="cnt">${condNow.length}</span><span class="ln"></span></h3><div class="lmgrid">${condNow.map(x=>lmRow(x,true)).join('')}</div>`:''}
+    ${condLater.length?`<h3 class="sub2">${T('lmCond')} <span class="cnt">${condLater.length}</span><span class="ln"></span></h3><div class="lmgrid">${condLater.map(x=>lmRow(x,false)).join('')}</div>`:''}
+    ${plain.length?`<h3 class="sub2">${T('lmPlain')} <span class="cnt">${plain.length}</span> <button class="tg" data-tog="hideLexPlain">${ui.hideLexPlain?T('show'):T('hide')}</button><span class="ln"></span></h3>${ui.hideLexPlain?'':`<div class="lmchips">${plain.map(x=>`<span class="dn" data-open="${esc(x.name)}">${mini(x.name)}${esc(nm(x.name))}</span>`).join('')}</div>`}`:''}</section>`:'';
   main.innerHTML=canHtml+pickHtml+
     `<section class="res"><h2>${T('possible')} <span class="n">${poss.length}</span><small>${T('possibleHelp')}</small></h2>
-    ${poss.length?`<div class="grid">${poss.map(e=>cardHtml(e,{hl:avail,how:P[e.name].how,missing:P[e.name].missing,steps:planSteps(e.name,P[e.name].how)})).join('')}</div>`:`<div class="empty">${T('possibleEmpty')}</div>`}</section>`;
+    ${poss.length?`<div class="grid">${poss.map(e=>cardHtml(e,{hl:avail,how:P[e.name].how,missing:P[e.name].missing,steps:planSteps(e.name,P[e.name].how)})).join('')}</div>`:`<div class="empty">${T('possibleEmpty')}</div>`}</section>`+lexHtml;
 }
 function renderAll(){ renderStatic(); renderProgress(); renderTools(); renderPicker(); renderMain(); const ex=$('#ioText'); if(ex) ex.value=exportCode(); }
 
