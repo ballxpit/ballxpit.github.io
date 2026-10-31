@@ -738,7 +738,7 @@ function renderStatic(){
   $('#credits').textContent=T('credits');
 }
 function renderProgress(){
-  const rows=TIERS.map(t=>{ const es=ALL.filter(e=>inTier(e,t.t)); return {label:tierLabel(t.t),d:es.filter(e=>done.has(e.id)).length,n:es.length}; });
+  const rows=TIERS.map(t=>{ const es=ALL.filter(e=>inTier(e,t.t)&&want(e)); return {label:tierLabel(t.t),d:es.filter(e=>done.has(e.id)).length,n:es.length}; });
   const tot={label:T('total'),d:rows.reduce((a,r)=>a+r.d,0),n:rows.reduce((a,r)=>a+r.n,0)};
   $('#progress').innerHTML=[tot,...rows].map((r,i)=>`<div class="prog"><div class="lbl"><span>${r.label}</span><span><b>${r.d}</b> / ${r.n}</span></div><div class="bar ${i===0?'total':''}"><i style="width:${r.n?100*r.d/r.n:0}%"></i></div></div>`).join('');
   $('#footSum').textContent = tot.n-tot.d===0 ? T('footAll') : T('footMiss')(tot.n-tot.d,tot.n);
@@ -814,7 +814,7 @@ function renderMain(){
     const groups=TIERS.filter(t=>ui.tier==='all'||String(t.t)===String(ui.tier));
     let html=''; let total=0;
     const grid=es=>`<div class="grid">${es.map(e=>e.kind?entryCardHtml(e):cardHtml(e)).join('')}</div>`;
-    for(const t of groups){ const all=ALL.filter(e=>inTier(e,t.t)); const es=all.filter(passFilters);
+    for(const t of groups){ const all=ALL.filter(e=>inTier(e,t.t)&&want(e)); const es=all.filter(passFilters);
       // same order as the in-game encyclopedia: base game before after-release; within that, combinations of more
       // than two parts (Nosferatu, Deadeye's Cross) last; otherwise alphabetical by English name, whatever the UI language
       const big=e=>e.recipes.some(r=>r.length>2);
@@ -963,7 +963,7 @@ document.addEventListener('click',ev=>{
   if(t.dataset.f){ ui.filter=t.dataset.f; saveUi(); renderTools(); renderMain(); return; }
   if(t.dataset.l){ ui.lang=t.dataset.l; saveUi(); renderAll(); return; }
   if(t.dataset.m){ ui.mode=t.dataset.m; saveUi(); renderTools(); renderMain(); window.scrollTo({top:0}); return; }
-  if(t.dataset.n){ ui.newF=t.dataset.n; saveUi(); renderTools(); renderPicker(); renderMain(); return; }
+  if(t.dataset.n){ ui.newF=t.dataset.n; saveUi(); renderAll(); return; }
   if(t.id==='clearSel'){ act(T('hClear'),()=>{ui.sel={}}); renderPicker(); renderMain(); return; }
   if(t.id==='togP'){ ui.showP=!ui.showP; saveUi(); renderPicker(); return; }
   if(t.id==='togE'){ ui.showE=!ui.showE; saveUi(); renderPicker(); return; }
